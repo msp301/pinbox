@@ -1,5 +1,11 @@
 $toolbar-height: 64px;
 
+button.compose {
+    position: absolute;
+    bottom: 70px;
+    right: 40px;
+}
+
 mat-toolbar {
     height: $toolbar-height;
 
@@ -22,4 +28,19 @@ mat-sidenav {
             margin-right: 1em;
         }
     }
+}
+
+mat-sidenav-content {
+    padding: 20px 30px 20px 30px;
+}
+
+.mat-expansion-panel-header-title {
+    white-space: nowrap;
+}
+
+.mat-expansion-panel-header-description {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

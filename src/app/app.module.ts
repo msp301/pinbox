@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {
+  MatButtonModule,
+  MatExpansionModule,
   MatInputModule,
   MatListModule,
   MatSlideToggleModule,
@@ -21,7 +23,9 @@ import {
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    MatButtonModule,
     MatCardModule,
+    MatExpansionModule,
     MatInputModule,
     MatListModule,
     MatSlideToggleModule,
