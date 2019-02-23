@@ -53,8 +53,8 @@
       </a>
       <mat-divider></mat-divider>
       <h3 mat-subheader>Unbundled</h3>
-      <a mat-list-item href="">
-          <mat-icon>label</mat-icon> <span>Other stuff</span>
+      <a mat-list-item href="" *ngFor="let label of labels">
+          <mat-icon>label</mat-icon> <span>{{ label.name }}</span>
       </a>
       <mat-divider></mat-divider>
       <a mat-list-item href="">
@@ -66,16 +66,22 @@
 
     <mat-expansion-panel hideToggle="true">
       <mat-expansion-panel-header>
-        <mat-panel-title>
-          This is the expansion title
-        </mat-panel-title>
-        <mat-panel-description>
-          This is a summary of the content itho tuhso tuh ostuhou
-          thouthou h
-        </mat-panel-description>
+        <mat-panel-title>{{ email.sender }}</mat-panel-title>
+        <mat-panel-description>{{ email.snippet }}</mat-panel-description>
       </mat-expansion-panel-header>
 
+      <div class="content-header">
+        <span>{{ email.sender }}</span>
+        <span class="fill"></span>
+        <span class="date">{{ email.epoch | date:'medium' }}</span>
+        <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
+      </div>
+
       <p>This is the primary content of the panel.</p>
+
+      <mat-action-row>
+        <button mat-icon-button><mat-icon>reply</mat-icon></button>
+      </mat-action-row>
 
     </mat-expansion-panel>
 

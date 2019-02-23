@@ -1,5 +1,13 @@
 $toolbar-height: 64px;
 
+%fill-space {
+    flex: 1 1 auto;
+}
+
+.fill {
+    @extend %fill-space;
+}
+
 button.compose {
     position: absolute;
     bottom: 70px;
@@ -15,7 +23,7 @@ mat-toolbar {
     }
 
     .search {
-        flex: 1 1 auto;
+        @extend %fill-space;
         font-size: 1em;
         margin-left: 0.5em;
         margin-right: 0.5em;
@@ -51,4 +59,12 @@ mat-sidenav-content {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.mat-expansion-panel {
+    .content-header {
+        align-items: center;
+        display: flex;
+        width: 100%;
+    }
 }
