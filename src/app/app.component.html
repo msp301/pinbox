@@ -64,7 +64,7 @@
   </mat-sidenav>
   <mat-sidenav-content>
 
-    <mat-expansion-panel hideToggle="true">
+    <mat-expansion-panel hideToggle="true" *ngFor="let email of emails">
       <mat-expansion-panel-header>
         <mat-panel-title>{{ email.sender }}</mat-panel-title>
         <mat-panel-description>{{ email.snippet }}</mat-panel-description>
@@ -82,7 +82,6 @@
       <mat-action-row>
         <button mat-icon-button><mat-icon>reply</mat-icon></button>
       </mat-action-row>
-
     </mat-expansion-panel>
 
     <button class="compose" mat-fab color="accent">

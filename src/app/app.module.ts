@@ -15,6 +15,7 @@ import {
   MatIconModule,
   MatCardModule
 } from '@angular/material';
+import { MailboxService } from './mailbox.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,9 @@ import {
     MatToolbarModule,
     MatIconModule,
   ],
-  providers: [],
+  providers: [
+    MailboxService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
