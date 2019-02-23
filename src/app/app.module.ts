@@ -7,7 +7,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatInputModule,
   MatListModule,
-  MatMenuModule,
   MatSlideToggleModule,
   MatSidenavModule,
   MatToolbarModule,
@@ -23,7 +22,6 @@ import {
     BrowserAnimationsModule,
     MatInputModule,
     MatListModule,
-    MatMenuModule,
     MatSlideToggleModule,
     MatSidenavModule,
     MatToolbarModule,
