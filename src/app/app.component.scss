@@ -1,7 +1,15 @@
+$toolbar-height: 64px;
+
 mat-toolbar {
+    height: $toolbar-height;
+
     .filler {
         flex: 1 1 auto;
     }
+}
+
+mat-sidenav-container {
+    height: calc( 100vh - #{ $toolbar-height } );
 }
 
 mat-sidenav {

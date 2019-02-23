@@ -10,7 +10,8 @@ import {
   MatSlideToggleModule,
   MatSidenavModule,
   MatToolbarModule,
-  MatIconModule
+  MatIconModule,
+  MatCardModule
 } from '@angular/material';
 
 @NgModule({
@@ -20,6 +21,7 @@ import {
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    MatCardModule,
     MatInputModule,
     MatListModule,
     MatSlideToggleModule,
