@@ -9,8 +9,16 @@ button.compose {
 mat-toolbar {
     height: $toolbar-height;
 
-    .filler {
+    .title {
+        margin-left: 0.5em;
+        margin-right: 3em;
+    }
+
+    .search {
         flex: 1 1 auto;
+        font-size: 1em;
+        margin-left: 0.5em;
+        margin-right: 0.5em;
     }
 }
 
