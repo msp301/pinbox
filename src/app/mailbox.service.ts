@@ -37,6 +37,14 @@ export class MailboxService {
             sender: 'Jeff <jeff@news.co.uk>',
             subject: 'Latest news in',
             snippet: 'Not much has happened, it is all old news',
+        },
+        {
+            id: 999,
+            epoch: 1550930545657,
+            recipient: 'Test <me@test.com>',
+            sender: 'Jeff <jeff@news.co.uk>',
+            subject: 'Latest news in',
+            snippet: 'Not much has happened, it is all old news',
         }
     ];
   }
