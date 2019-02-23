@@ -1,20 +1,95 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="sidenav.toggle()" aria-label="menu">
+    <mat-icon>menu</mat-icon>
+  </button>
 
+  <span>{{ title }}</span>
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="side" opened>
+    <mat-nav-list>
+      <a mat-list-item href="">
+        <mat-icon>inbox</mat-icon> <span>Inbox</span>
+      </a>
+      <a mat-list-item href="">
+        <mat-icon>watch_later</mat-icon> <span>Snoozed</span>
+      </a>
+      <a mat-list-item href="">
+        <mat-icon>done</mat-icon> <span>Done</span>
+      </a>
+      <mat-divider></mat-divider>
+      <a mat-list-item href="">
+        <mat-icon>drafts</mat-icon> <span>Drafts</span>
+      </a>
+      <a mat-list-item href="">
+        <mat-icon>send</mat-icon> <span>Sent</span>
+      </a>
+      <a mat-list-item href="">
+        <mat-icon>next_week</mat-icon> <span>Reminders</span>
+      </a>
+      <a mat-list-item href="">
+        <mat-icon>delete</mat-icon> <span>Bin</span>
+      </a>
+      <a mat-list-item href="">
+        <mat-icon>report</mat-icon> <span>Spam</span>
+      </a>
+      <mat-divider></mat-divider>
+      <h3 mat-subheader>Bundled in the inbox</h3>
+      <a mat-list-item href="">
+          <mat-icon>shopping_cart</mat-icon> <span>Purchases</span>
+      </a>
+      <mat-divider></mat-divider>
+      <h3 mat-subheader>Skip the inbox</h3>
+      <a mat-list-item href="">
+          <mat-icon>label</mat-icon> <span>Some rubbish</span>
+      </a>
+      <mat-divider></mat-divider>
+      <h3 mat-subheader>Unbundled</h3>
+      <a mat-list-item href="">
+          <mat-icon>label</mat-icon> <span>Other stuff</span>
+      </a>
+      <mat-divider></mat-divider>
+      <a mat-list-item href="">
+        <mat-icon>settings</mat-icon> <span>Settings</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div style="text-align:center">
+      <h1>
+        Welcome to {{ title }}!
+      </h1>
+      <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+    </div>
+    <h2>Here are some links to help you start: </h2>
+    <ul>
+      <li>
+        <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
+      </li>
+      <li>
+        <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
+      </li>
+      <li>
+        <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
+      </li>
+    </ul>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>
+    <mat-icon>inbox</mat-icon>
+    <span>Inbox</span>
+  </button>
+  <button mat-menu-item disabled>
+    <mat-icon>voicemail</mat-icon>
+    <span>Check voicemail</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon>notifications_off</mat-icon>
+    <span>Disable alerts</span>
+  </button>
+</mat-menu>
