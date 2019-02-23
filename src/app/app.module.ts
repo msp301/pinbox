@@ -4,7 +4,15 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { MatListModule, MatMenuModule, MatSidenavModule, MatToolbarModule, MatIconModule } from '@angular/material';
+import {
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatSlideToggleModule,
+  MatSidenavModule,
+  MatToolbarModule,
+  MatIconModule
+} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -13,8 +21,10 @@ import { MatListModule, MatMenuModule, MatSidenavModule, MatToolbarModule, MatIc
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatSlideToggleModule,
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
