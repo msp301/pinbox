@@ -21,6 +21,8 @@
     "@angular/platform-browser": "~7.2.0",
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
+    "@types/gapi": "0.0.36",
+    "@types/gapi.auth2": "0.0.50",
     "core-js": "^2.5.4",
     "hammerjs": "^2.0.8",
     "rxjs": "~6.3.3",
