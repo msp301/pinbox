@@ -1,31 +1,16 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MailboxService {
 
-  constructor() { }
+  constructor( private http: HttpClient ) { }
 
-  getLabels(): EmailLabel[] {
-    return [
-        {
-            id: 1,
-            name: 'Test'
-        },
-        {
-            id: 2,
-            name: 'Thing'
-        },
-        {
-            id: 3,
-            name: 'Another thing here'
-        },
-        {
-            id: 4,
-            name: 'Boo Boo Boo'
-        }
-    ];
+  getLabels(): Observable<any> {
+    return this.http.get( '/api/labels' );
   }
 
   getMessages(): Email[] {

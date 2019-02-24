@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Email, EmailLabel, MailboxService } from './mailbox.service';
+import { HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,11 +12,11 @@ import { Email, EmailLabel, MailboxService } from './mailbox.service';
 
 export class AppComponent {
   title = 'Pinbox';
-  public labels: EmailLabel[];
+  public labels: Observable<object>;
   public emails: Email[];
 
   constructor( private mailbox: MailboxService ) {
-    this.labels = mailbox.getLabels();
+    mailbox.getLabels().subscribe( value => this.labels = value );
     this.emails = mailbox.getMessages();
   }
 }
