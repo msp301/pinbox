@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -7,9 +7,9 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./google-signin.component.scss']
 })
 export class GoogleSigninComponent implements AfterViewInit {
-  private clientID = '411957897094-d5580fbohimjstmtocdq94a1vrj468ss.apps.googleusercontent.com';
+  private clientID = '411957897094-h6ofim4lbqrugld28e7dj0jfb60potjv.apps.googleusercontent.com';
   private scopes: string = [
-    'https://www.googleapis.com/auth/gmail.readonly',
+    'email'
   ].join( ' ' );
 
   public auth2: gapi.auth2.GoogleAuth;
