@@ -1,32 +1,74 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/gorilla/mux"
+	notmuch "github.com/msp301/go.notmuch"
 )
 
-func getLabels(writer http.ResponseWriter, req *http.Request) {
-	writer.Write([]byte(`[ { "id": 765, "name": "Beep" } ]`))
+func openIndexDatabase(path string) *notmuch.DB {
+	var db *notmuch.DB
+	var status error
+	var dbPath = path + "/.notmuch"
+
+	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
+		db, status = notmuch.Create(path)
+		db.Close()
+	}
+	if status == nil {
+		db, status = notmuch.Open(path, notmuch.DBReadWrite)
+	} else {
+		log.Fatal("Failed to open database")
+	}
+
+	return db
 }
 
-func getMessages(writer http.ResponseWriter, req *http.Request) {
-	writer.Write([]byte(`[ { "id": 999, "epoch": 1550930545657, "recipient": "Test <hello@test.com>", "sender": "API <api@server.net>", "subject": "Hello", "snippet": "Test email and stuff"  } ]`))
+func getLabels(db *notmuch.DB) []byte {
+	tags, err := db.Tags()
+	if err != nil {
+		log.Println("Error getting tags")
+	}
+
+	content, err := json.Marshal(tags.Slice())
+
+	if err != nil {
+		log.Println("Failed to convert to JSON", err)
+		return nil
+	}
+
+	return content
 }
 
-func handler(writer http.ResponseWriter, req *http.Request) {
-	writer.Write([]byte("Hello World!\n"))
-	return
+func getMessages(db *notmuch.DB) []byte {
+	return []byte(`[ { "id": 999, "epoch": 1550930545657, "recipient": "Test <hello@test.com>", "sender": "API <api@server.net>", "subject": "Hello", "snippet": "Test email and stuff"  } ]`)
+}
+
+func handler(body []byte) http.HandlerFunc {
+	return func(writer http.ResponseWriter, req *http.Request) {
+		writer.Write(body)
+		return
+	}
 }
 
 // our main function
 func main() {
+	args := os.Args[1:]
+	dir, err := filepath.Abs(args[0])
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db := openIndexDatabase(dir)
 	router := mux.NewRouter()
 
-	router.HandleFunc("/", handler)
-	router.HandleFunc("/api/labels", getLabels)
-	router.HandleFunc("/api/messages", getMessages)
+	router.HandleFunc("/api/labels", handler(getLabels(db)))
+	router.HandleFunc("/api/messages", handler(getMessages(db)))
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
