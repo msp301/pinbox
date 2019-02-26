@@ -11,6 +11,11 @@ import (
 	notmuch "github.com/msp301/go.notmuch"
 )
 
+type Label struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
 func openIndexDatabase(path string) *notmuch.DB {
 	var db *notmuch.DB
 	var status error
@@ -35,7 +40,12 @@ func getLabels(db *notmuch.DB) []byte {
 		log.Println("Error getting tags")
 	}
 
-	content, err := json.Marshal(tags.Slice())
+	var payload []Label
+	for _, name := range tags.Slice() {
+		label := Label{ID: name, Name: name}
+		payload = append(payload, label)
+	}
+	content, err := json.Marshal(payload)
 
 	if err != nil {
 		log.Println("Failed to convert to JSON", err)
