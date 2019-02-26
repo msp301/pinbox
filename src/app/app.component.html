@@ -66,14 +66,14 @@
 
     <mat-expansion-panel hideToggle="true" *ngFor="let email of emails">
       <mat-expansion-panel-header>
-        <mat-panel-title>{{ email.sender }}</mat-panel-title>
-        <mat-panel-description>{{ email.snippet }}</mat-panel-description>
+        <mat-panel-title>{{ email.authors }}</mat-panel-title>
+        <mat-panel-description>{{ email.subject }}</mat-panel-description>
       </mat-expansion-panel-header>
 
       <div class="content-header">
-        <span>{{ email.sender }}</span>
+        <span>{{ email.authors }}</span>
         <span class="fill"></span>
-        <span class="date">{{ email.epoch | date:'medium' }}</span>
+        <span class="date">{{ email.newestDate | date:'medium' }}</span>
         <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
       </div>
 
