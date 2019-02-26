@@ -11,9 +11,24 @@ import (
 	notmuch "github.com/msp301/go.notmuch"
 )
 
-type Label struct {
+type ourLabel struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
+}
+
+type ourMessage struct {
+	ID    string   `json:"id"`
+	Epoch int64    `json:"epoch"`
+	Files []string `json:"files"`
+}
+
+type ourThread struct {
+	ID         string       `json:"id"`
+	Subject    string       `json:"subject"`
+	NewestDate int64        `json:"newestDate"`
+	OldestDate int64        `json:"oldestDate"`
+	Authors    []string     `json:"authors"`
+	Messages   []ourMessage `json:messages`
 }
 
 func openIndexDatabase(path string) *notmuch.DB {
@@ -40,9 +55,9 @@ func getLabels(db *notmuch.DB) []byte {
 		log.Println("Error getting tags")
 	}
 
-	var payload []Label
+	var payload []ourLabel
 	for _, name := range tags.Slice() {
-		label := Label{ID: name, Name: name}
+		label := ourLabel{ID: name, Name: name}
 		payload = append(payload, label)
 	}
 	content, err := json.Marshal(payload)
@@ -56,7 +71,59 @@ func getLabels(db *notmuch.DB) []byte {
 }
 
 func getMessages(db *notmuch.DB) []byte {
-	return []byte(`[ { "id": 999, "epoch": 1550930545657, "recipient": "Test <hello@test.com>", "sender": "API <api@server.net>", "subject": "Hello", "snippet": "Test email and stuff"  } ]`)
+
+	query := db.NewQuery("*")
+	threads, err := query.Threads()
+
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+
+	var payload []ourThread
+	thr := notmuch.Thread{}
+	for threads.Next(&thr) {
+		_, authors := thr.Authors()
+
+		var messages []ourMessage
+		msg := notmuch.Message{}
+		msgs := thr.TopLevelMessages()
+		for msgs.Next(&msg) {
+			var files []string
+			file := ""
+			filenames := msg.Filenames()
+			for filenames.Next(&file) {
+				files = append(files, file)
+			}
+
+			message := ourMessage{
+				ID:    msg.ID(),
+				Epoch: msg.Date().Unix(),
+				Files: files,
+			}
+
+			messages = append(messages, message)
+		}
+
+		res := ourThread{
+			ID:         thr.ID(),
+			Subject:    thr.Subject(),
+			NewestDate: thr.NewestDate().Unix(),
+			OldestDate: thr.OldestDate().Unix(),
+			Authors:    authors,
+			Messages:   messages,
+		}
+		payload = append(payload, res)
+	}
+
+	content, err := json.Marshal(payload)
+
+	if err != nil {
+		log.Println("Failed to convert to JSON", err)
+		return nil
+	}
+
+	return content
 }
 
 func handler(body []byte) http.HandlerFunc {
