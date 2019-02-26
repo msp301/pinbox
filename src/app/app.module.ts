@@ -18,15 +18,13 @@ import {
   MatCardModule
 } from '@angular/material';
 import { MailboxService } from './mailbox.service';
-import { GoogleSigninComponent } from './google-signin/google-signin.component';
 
 const appRoutes: Routes = [
 ];
 
 @NgModule({
   declarations: [
-    AppComponent,
-    GoogleSigninComponent
+    AppComponent
   ],
   imports: [
     RouterModule.forRoot(
