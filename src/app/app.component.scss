@@ -9,8 +9,8 @@ $toolbar-height: 64px;
 }
 
 button.compose {
-    position: absolute;
-    bottom: 70px;
+    position: fixed;
+    bottom: 25px;
     right: 40px;
 }
 
