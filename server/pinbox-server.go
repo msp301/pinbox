@@ -22,6 +22,12 @@ type ourMessage struct {
 	Files []string `json:"files"`
 }
 
+type ourMessageContent struct {
+	ID      string `json:"id"`
+	Author  string `json:"author"`
+	Content string `json:"content"`
+}
+
 type ourThread struct {
 	ID         string       `json:"id"`
 	Subject    string       `json:"subject"`
@@ -49,7 +55,7 @@ func openIndexDatabase(path string) *notmuch.DB {
 	return db
 }
 
-func getLabels(db *notmuch.DB) []byte {
+func getLabels(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 	tags, err := db.Tags()
 	if err != nil {
 		log.Println("Error getting tags")
@@ -64,20 +70,44 @@ func getLabels(db *notmuch.DB) []byte {
 
 	if err != nil {
 		log.Println("Failed to convert to JSON", err)
-		return nil
+		return
 	}
 
-	return content
+	handler(content, writer)
 }
 
-func getMessages(db *notmuch.DB) []byte {
+func getMessage(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
+	vars := mux.Vars(req)
+	msg, err := db.FindMessage(vars["id"])
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	payload := ourMessageContent{
+		ID:     msg.ID(),
+		Author: msg.Header("From"),
+	}
+
+	content, err := json.Marshal(payload)
+
+	if err != nil {
+		log.Println("Failed to convert to JSON", err)
+		return
+	}
+
+	handler(content, writer)
+}
+
+func getMessages(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 
 	query := db.NewQuery("*")
 	threads, err := query.Threads()
 
 	if err != nil {
 		log.Println(err)
-		return nil
+		return
 	}
 
 	var payload []ourThread
@@ -120,17 +150,16 @@ func getMessages(db *notmuch.DB) []byte {
 
 	if err != nil {
 		log.Println("Failed to convert to JSON", err)
-		return nil
-	}
-
-	return content
-}
-
-func handler(body []byte) http.HandlerFunc {
-	return func(writer http.ResponseWriter, req *http.Request) {
-		writer.Write(body)
 		return
 	}
+
+	handler(content, writer)
+}
+
+func handler(body []byte, writer http.ResponseWriter) {
+	writer.Header().Set("Content-Type", "application/json")
+	writer.Write(body)
+	return
 }
 
 // our main function
@@ -144,8 +173,15 @@ func main() {
 	db := openIndexDatabase(dir)
 	router := mux.NewRouter()
 
-	router.HandleFunc("/api/labels", handler(getLabels(db)))
-	router.HandleFunc("/api/messages", handler(getMessages(db)))
+	router.HandleFunc("/api/labels", func(writer http.ResponseWriter, req *http.Request) {
+		getLabels(writer, req, db)
+	})
+	router.HandleFunc("/api/messages", func(writer http.ResponseWriter, req *http.Request) {
+		getMessages(writer, req, db)
+	})
+	router.HandleFunc("/api/messages/{id}", func(writer http.ResponseWriter, req *http.Request) {
+		getMessage(writer, req, db)
+	})
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
