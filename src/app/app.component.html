@@ -73,7 +73,7 @@
       <div class="content-header">
         <span>{{ email.authors }}</span>
         <span class="fill"></span>
-        <span class="date">{{ email.newestDate | date:'medium' }}</span>
+        <span class="date">{{ email.newestDate * 1000 | date:'medium' }}</span>
         <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
       </div>
 
