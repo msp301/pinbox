@@ -1,7 +1,8 @@
 import { Component, Input, EventEmitter, OnChanges, Output } from '@angular/core';
-import { EmailContent, EmailLabel, MailboxService } from './mailbox.service';
+import { EmailLabel, MailboxService } from './mailbox.service';
 import { ActivatedRoute } from '@angular/router';
 import { Thread } from './core/thread.model';
+import { Message } from './core/message.model';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,7 @@ export class AppComponent implements OnChanges {
   title = 'Pinbox';
   public labels: EmailLabel[];
   public emails: Thread[];
-  public message: EmailContent;
+  public message: Message;
 
   @Input() messageId: string;
   @Output() messageOpened = new EventEmitter();

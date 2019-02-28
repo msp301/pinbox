@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Thread, ThreadAdapter } from './core/thread.model';
+import { Message, MessageAdapter } from './core/message.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,20 +13,23 @@ export class MailboxService {
 
   constructor(
     private http: HttpClient,
-    private adapter: ThreadAdapter,
+    private adapterThread: ThreadAdapter,
+    private adapterMessage: MessageAdapter,
   ) { }
 
   getLabels(): Observable<any> {
     return this.http.get( '/api/labels' );
   }
 
-  getMessage(id: string): Observable<any> {
-    return this.http.get( '/api/messages/' + id );
+  getMessage(id: string): Observable<Message> {
+    return this.http.get( '/api/messages/' + id ).pipe(
+      map( ( data: any ) => data.map( item => this.adapterMessage.adapt(item) ) ),
+    );
   }
 
   getMessages(): Observable<Thread[]> {
     return this.http.get( '/api/messages' ).pipe(
-      map( ( data: any[] ) => data.map( item => this.adapter.adapt( item ) ) ),
+      map( ( data: any[] ) => data.map( item => this.adapterThread.adapt( item ) ) ),
     );
   }
 }
