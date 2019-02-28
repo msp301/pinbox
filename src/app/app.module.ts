@@ -20,6 +20,7 @@ import {
 import { MailboxService } from './mailbox.service';
 
 const appRoutes: Routes = [
+  { path: 'messages/:id', component: AppComponent },
 ];
 
 @NgModule({

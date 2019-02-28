@@ -64,21 +64,27 @@
   </mat-sidenav>
   <mat-sidenav-content>
 
-    <mat-expansion-panel hideToggle="true" *ngFor="let email of emails">
+    <mat-expansion-panel hideToggle="true" *ngFor="let thread of emails">
       <mat-expansion-panel-header>
-        <mat-panel-title>{{ email.authors }}</mat-panel-title>
-        <mat-panel-description>{{ email.subject }}</mat-panel-description>
+        <mat-panel-title>{{ thread.authors }}</mat-panel-title>
+        <mat-panel-description>{{ thread.subject }}</mat-panel-description>
       </mat-expansion-panel-header>
 
-      <div class="content-header">
-        <span>{{ email.authors }}</span>
-        <span class="fill"></span>
-        <span class="date">{{ email.newestDate * 1000 | date:'medium' }}</span>
-        <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
-      </div>
+      <mat-expansion-panel *ngFor="let message of thread.messages" (click)="getMessage()">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ message.author }}</mat-panel-title>
+          <mat-panel-description>{{ thread.subject }}</mat-panel-description>
+        </mat-expansion-panel-header>
 
-      <p>This is the primary content of the panel.</p>
+        <div class="content-header">
+          <span>{{ thread.authors }}</span>
+          <span class="fill"></span>
+          <span class="date">{{ message.epoch * 1000 | date:'medium' }}</span>
+          <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
+        </div>
 
+        <p>{{ message.content }}</p>
+      </mat-expansion-panel>
       <mat-action-row>
         <button mat-icon-button><mat-icon>reply</mat-icon></button>
       </mat-action-row>
