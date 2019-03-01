@@ -1,0 +1,15 @@
+<mat-expansion-panel hideToggle="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{ author }}</mat-panel-title>
+    <mat-panel-description>{{ subject }}</mat-panel-description>
+    <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
+  </mat-expansion-panel-header>
+
+  <div class="content-header">
+    <span>{{ author }}</span>
+    <span class="fill"></span>
+    <span class="date">{{ date | date:"medium" }}</span>
+  </div>
+
+  <p [innerHTML]="content"></p>
+</mat-expansion-panel>

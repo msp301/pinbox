@@ -70,21 +70,8 @@
         <mat-panel-description>{{ thread.subject }}</mat-panel-description>
       </mat-expansion-panel-header>
 
-      <mat-expansion-panel *ngFor="let message of thread.messages" (click)="getMessage()">
-        <mat-expansion-panel-header>
-          <mat-panel-title>{{ message.author }}</mat-panel-title>
-          <mat-panel-description>{{ thread.subject }}</mat-panel-description>
-        </mat-expansion-panel-header>
+      <app-message *ngFor="let msg of thread.messages" [id]="msg.id"></app-message>
 
-        <div class="content-header">
-          <span>{{ thread.authors }}</span>
-          <span class="fill"></span>
-          <span class="date">{{ message.epoch * 1000 | date:'medium' }}</span>
-          <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
-        </div>
-
-        <p>{{ message.content }}</p>
-      </mat-expansion-panel>
       <mat-action-row>
         <button mat-icon-button><mat-icon>reply</mat-icon></button>
       </mat-action-row>

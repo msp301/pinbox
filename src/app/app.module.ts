@@ -18,6 +18,7 @@ import {
   MatCardModule
 } from '@angular/material';
 import { MailboxService } from './mailbox.service';
+import { MessageComponent } from './message/message.component';
 
 const appRoutes: Routes = [
   { path: 'messages/:id', component: AppComponent },
@@ -25,7 +26,8 @@ const appRoutes: Routes = [
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MessageComponent
   ],
   imports: [
     RouterModule.forRoot(

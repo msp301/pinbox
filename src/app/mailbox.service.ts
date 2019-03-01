@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
 
 import { Thread, ThreadAdapter } from './core/thread.model';
 import { Message, MessageAdapter } from './core/message.model';
@@ -23,7 +24,7 @@ export class MailboxService {
 
   getMessage(id: string): Observable<Message> {
     return this.http.get( '/api/messages/' + id ).pipe(
-      map( ( data: any ) => data.map( item => this.adapterMessage.adapt(item) ) ),
+      map( ( data: any ) => this.adapterMessage.adapt( data ) ),
     );
   }
 
@@ -38,15 +39,6 @@ export interface EmailLabel {
     id: number;
     name: string;
 }
-
-/*export interface Thread {
-  id: number;
-  authors: string[];
-  subject: string;
-  newestDate: number;
-  oldestDate: number;
-  messages: Email[];
-}*/
 
 export interface Email {
     id: number;

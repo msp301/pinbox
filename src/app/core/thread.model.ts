@@ -8,6 +8,7 @@ export class Thread {
     public newestDate: Date,
     public oldestDate: Date,
     public authors: string[],
+    public messages: any[],
   ) {}
 }
 
@@ -22,6 +23,7 @@ export class ThreadAdapter implements Adapter<Thread> {
       new Date( item.newestDate * 1000 ),
       new Date( item.oldestDate * 1000 ),
       item.authors,
+      item.messages,
     );
   }
 }

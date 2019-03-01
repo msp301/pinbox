@@ -1,0 +1,28 @@
+%fill-space {
+  flex: 1 1 auto;
+}
+
+.fill {
+  @extend %fill-space;
+}
+
+.content-header {
+  align-items: center;
+  display: flex;
+  width: 100%;
+}
+
+.mat-expansion-panel-header-title {
+  white-space: nowrap;
+}
+
+.mat-expansion-panel-header-description {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mat-expansion-panel {
+  margin-bottom: 0.2em;
+}

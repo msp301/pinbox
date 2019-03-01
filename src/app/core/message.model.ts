@@ -18,7 +18,7 @@ export class MessageAdapter implements Adapter<Message> {
   adapt( item: any ): Message {
     return new Message(
       item.id,
-      new Date( item.date * 1000 ),
+      new Date( item.epoch * 1000 ),
       item.subject,
       item.author,
       item.content,
