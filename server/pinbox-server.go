@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -8,6 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/gorilla/mux"
+	"github.com/jhillyerd/enmime"
 	notmuch "github.com/msp301/go.notmuch"
 )
 
@@ -24,6 +26,7 @@ type ourMessage struct {
 
 type ourMessageContent struct {
 	ID      string `json:"id"`
+	Epoch   int64  `json:"epoch"`
 	Author  string `json:"author"`
 	Content string `json:"content"`
 }
@@ -34,7 +37,7 @@ type ourThread struct {
 	NewestDate int64        `json:"newestDate"`
 	OldestDate int64        `json:"oldestDate"`
 	Authors    []string     `json:"authors"`
-	Messages   []ourMessage `json:messages`
+	Messages   []ourMessage `json:"messages"`
 }
 
 func openIndexDatabase(path string) *notmuch.DB {
@@ -85,9 +88,30 @@ func getMessage(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 		return
 	}
 
+	file, err := os.Open(msg.Filename())
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	env, err := enmime.ReadEnvelope(file)
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	body := env.HTML
+	if len(body) == 0 {
+		body = env.Text
+	}
+
 	payload := ourMessageContent{
-		ID:     msg.ID(),
-		Author: msg.Header("From"),
+		ID:      msg.ID(),
+		Epoch:   msg.Date().Unix(),
+		Author:  msg.Header("From"),
+		Content: base64.StdEncoding.EncodeToString([]byte(body)),
 	}
 
 	content, err := json.Marshal(payload)
