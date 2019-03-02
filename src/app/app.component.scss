@@ -30,8 +30,9 @@ mat-toolbar {
     }
 }
 
-mat-sidenav-container {
+.mat-sidenav-container {
     height: calc( 100vh - #{ $toolbar-height } );
+    padding-bottom: 50px;
 }
 
 mat-sidenav {
@@ -47,5 +48,6 @@ mat-sidenav {
 }
 
 mat-sidenav-content {
+    height: 100%;
     padding: 20px 30px 20px 30px;
 }
