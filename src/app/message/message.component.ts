@@ -7,7 +7,7 @@ import { Message } from '../core/message.model';
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss']
 })
-export class MessageComponent implements OnInit {
+export class MessageComponent {
   @Input() id: string;
   author: string;
   content: string;
@@ -17,14 +17,15 @@ export class MessageComponent implements OnInit {
     private service: MailboxService,
   ) { }
 
-  ngOnInit() {
-    this.service.getMessage( this.id ).subscribe(
-      ( message: Message ) => {
-        this.author = message.author;
-        this.date = message.date;
-        this.content = atob( message.content );
-      }
-    );
+  toggle() {
+    if ( ! this.content ) {
+      this.service.getMessage( this.id ).subscribe(
+        ( message: Message ) => {
+          this.author = message.author;
+          this.date = message.date;
+          this.content = atob( message.content );
+        }
+      );
+    }
   }
-
 }
