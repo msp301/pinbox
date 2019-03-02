@@ -2,10 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-
-import { Thread, ThreadAdapter } from './core/thread.model';
+import { Label, LabelAdapter } from './core/label.model';
 import { Message, MessageAdapter } from './core/message.model';
+import { Thread, ThreadAdapter } from './core/thread.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +13,15 @@ export class MailboxService {
 
   constructor(
     private http: HttpClient,
+    private adapterLabel: LabelAdapter,
     private adapterThread: ThreadAdapter,
     private adapterMessage: MessageAdapter,
   ) { }
 
-  getLabels(): Observable<any> {
-    return this.http.get( '/api/labels' );
+  getLabels(): Observable<Label[]> {
+    return this.http.get( '/api/labels' ).pipe(
+      map( ( data: any[] ) => data.map( item => this.adapterLabel.adapt( item ) ) ),
+    );
   }
 
   getMessage(id: string): Observable<Message> {
@@ -33,24 +35,4 @@ export class MailboxService {
       map( ( data: any[] ) => data.map( item => this.adapterThread.adapt( item ) ) ),
     );
   }
-}
-
-export interface EmailLabel {
-    id: number;
-    name: string;
-}
-
-export interface Email {
-    id: number;
-    epoch: number;
-    recipient: string;
-    sender: string;
-    subject: string;
-    snippet: string;
-}
-
-export interface EmailContent {
-  id: string;
-  author: string;
-  content: string;
 }

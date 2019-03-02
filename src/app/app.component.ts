@@ -1,8 +1,8 @@
 import { Component, Input, EventEmitter, OnChanges, Output } from '@angular/core';
-import { EmailLabel, MailboxService } from './mailbox.service';
-import { ActivatedRoute } from '@angular/router';
+import { MailboxService } from './mailbox.service';
 import { Thread } from './core/thread.model';
 import { Message } from './core/message.model';
+import { Label } from './core/label.model';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +13,7 @@ import { Message } from './core/message.model';
 
 export class AppComponent implements OnChanges {
   title = 'Pinbox';
-  public labels: EmailLabel[];
+  public labels: Label[];
   public emails: Thread[];
   public message: Message;
 
@@ -21,13 +21,10 @@ export class AppComponent implements OnChanges {
   @Output() messageOpened = new EventEmitter();
 
   constructor(
-    private route: ActivatedRoute,
     private mailbox: MailboxService,
   ) {
     mailbox.getLabels().subscribe( value => this.labels = value );
     mailbox.getMessages().subscribe( value => this.emails = value );
-
-    // this.route.params.subscribe( params => this.getMessage( params.id ) );
   }
 
   getMessage() {
