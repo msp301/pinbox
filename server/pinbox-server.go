@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 
@@ -81,7 +82,12 @@ func getLabels(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 
 func getMessage(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 	vars := mux.Vars(req)
-	msg, err := db.FindMessage(vars["id"])
+	rawID, err := url.PathUnescape(vars["id"])
+
+	var msg *notmuch.Message
+	if err == nil {
+		msg, err = db.FindMessage(rawID)
+	}
 
 	if err != nil {
 		log.Println(err)
@@ -196,6 +202,8 @@ func main() {
 
 	db := openIndexDatabase(dir)
 	router := mux.NewRouter()
+
+	router.UseEncodedPath()
 
 	router.HandleFunc("/api/labels", func(writer http.ResponseWriter, req *http.Request) {
 		getLabels(writer, req, db)
