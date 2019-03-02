@@ -23,7 +23,7 @@ export class MailboxService {
   }
 
   getMessage(id: string): Observable<Message> {
-    return this.http.get( '/api/messages/' + id ).pipe(
+    return this.http.get( '/api/messages/' +  encodeURIComponent( id ) ).pipe(
       map( ( data: any ) => this.adapterMessage.adapt( data ) ),
     );
   }
