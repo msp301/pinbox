@@ -130,16 +130,7 @@ func getMessage(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 	handler(content, writer)
 }
 
-func getMessages(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
-
-	query := db.NewQuery("*")
-	threads, err := query.Threads()
-
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
+func getMessages(writer http.ResponseWriter, req *http.Request, db *notmuch.DB, threads *notmuch.Threads) {
 	var payload []ourThread
 	thr := notmuch.Thread{}
 	for threads.Next(&thr) {
@@ -208,9 +199,33 @@ func main() {
 	router.HandleFunc("/api/labels", func(writer http.ResponseWriter, req *http.Request) {
 		getLabels(writer, req, db)
 	})
-	router.HandleFunc("/api/messages", func(writer http.ResponseWriter, req *http.Request) {
-		getMessages(writer, req, db)
+
+	router.Path("/api/messages").Queries("label", "{label}").HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
+		vars := mux.Vars(req)
+
+		query := db.NewQuery("tag:" + vars["label"])
+		threads, err := query.Threads()
+
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		getMessages(writer, req, db, threads)
 	})
+
+	router.HandleFunc("/api/messages", func(writer http.ResponseWriter, req *http.Request) {
+		query := db.NewQuery("*")
+		threads, err := query.Threads()
+
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		getMessages(writer, req, db, threads)
+	})
+
 	router.HandleFunc("/api/messages/{id}", func(writer http.ResponseWriter, req *http.Request) {
 		getMessage(writer, req, db)
 	})
