@@ -22,7 +22,7 @@ import { MessageComponent } from './message/message.component';
 import { ThreadListComponent } from './thread-list/thread-list.component';
 
 const appRoutes: Routes = [
-  { path: 'messages/:id', component: AppComponent },
+  { path: 'messages/:label', component: ThreadListComponent },
 ];
 
 @NgModule({

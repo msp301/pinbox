@@ -16,7 +16,7 @@
 <mat-sidenav-container>
   <mat-sidenav #sidenav mode="side" opened>
     <mat-nav-list>
-      <a mat-list-item href="">
+      <a mat-list-item [routerLink]="['/messages/inbox']">
         <mat-icon>inbox</mat-icon> <span>Inbox</span>
       </a>
       <a mat-list-item href="">
@@ -53,7 +53,7 @@
       </a>
       <mat-divider></mat-divider>
       <h3 mat-subheader>Unbundled</h3>
-      <a mat-list-item href="" *ngFor="let label of labels">
+      <a mat-list-item [routerLink]="['messages', label.name]" *ngFor="let label of labels">
           <mat-icon>label</mat-icon> <span>{{ label.name }}</span>
       </a>
       <mat-divider></mat-divider>
@@ -64,7 +64,7 @@
   </mat-sidenav>
   <mat-sidenav-content>
 
-    <app-thread-list></app-thread-list>
+    <router-outlet></router-outlet>
 
     <button class="compose" mat-fab color="accent">
       <mat-icon>add</mat-icon>

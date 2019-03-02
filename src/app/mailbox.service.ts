@@ -35,4 +35,10 @@ export class MailboxService {
       map( ( data: any[] ) => data.map( item => this.adapterThread.adapt( item ) ) ),
     );
   }
+
+  getMessagesByLabel(id: string): Observable<Thread[]> {
+    return this.http.get( '/api/messages?label=' + id ).pipe(
+      map( ( data: any[] ) => data.map( item => this.adapterThread.adapt( item ) ) ),
+    );
+  }
 }
