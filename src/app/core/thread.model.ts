@@ -8,7 +8,7 @@ export class Thread {
     public newestDate: Date,
     public oldestDate: Date,
     public authors: string[],
-    public messages: any[],
+    public messages: { id: string }[],
   ) {}
 }
 

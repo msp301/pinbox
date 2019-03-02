@@ -13,11 +13,16 @@
 }
 
 .mat-expansion-panel-header-title {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   white-space: nowrap;
 }
 
 .mat-expansion-panel-header-description {
-  display: block;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -64,18 +64,7 @@
   </mat-sidenav>
   <mat-sidenav-content>
 
-    <mat-expansion-panel hideToggle="true" *ngFor="let thread of emails">
-      <mat-expansion-panel-header>
-        <mat-panel-title>{{ thread.authors }}</mat-panel-title>
-        <mat-panel-description>{{ thread.subject }}</mat-panel-description>
-      </mat-expansion-panel-header>
-
-      <app-message *ngFor="let msg of thread.messages" [id]="msg.id"></app-message>
-
-      <mat-action-row>
-        <button mat-icon-button><mat-icon>reply</mat-icon></button>
-      </mat-action-row>
-    </mat-expansion-panel>
+    <app-thread-list></app-thread-list>
 
     <button class="compose" mat-fab color="accent">
       <mat-icon>add</mat-icon>

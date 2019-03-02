@@ -19,6 +19,7 @@ import {
 } from '@angular/material';
 import { MailboxService } from './mailbox.service';
 import { MessageComponent } from './message/message.component';
+import { ThreadListComponent } from './thread-list/thread-list.component';
 
 const appRoutes: Routes = [
   { path: 'messages/:id', component: AppComponent },
@@ -27,7 +28,8 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    MessageComponent
+    MessageComponent,
+    ThreadListComponent
   ],
   imports: [
     RouterModule.forRoot(

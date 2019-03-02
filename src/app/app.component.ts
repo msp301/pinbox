@@ -1,6 +1,5 @@
 import { Component, Input, EventEmitter, OnChanges, Output } from '@angular/core';
 import { MailboxService } from './mailbox.service';
-import { Thread } from './core/thread.model';
 import { Message } from './core/message.model';
 import { Label } from './core/label.model';
 
@@ -14,7 +13,6 @@ import { Label } from './core/label.model';
 export class AppComponent implements OnChanges {
   title = 'Pinbox';
   public labels: Label[];
-  public emails: Thread[];
   public message: Message;
 
   @Input() messageId: string;
@@ -24,7 +22,6 @@ export class AppComponent implements OnChanges {
     private mailbox: MailboxService,
   ) {
     mailbox.getLabels().subscribe( value => this.labels = value );
-    mailbox.getMessages().subscribe( value => this.emails = value );
   }
 
   getMessage() {
