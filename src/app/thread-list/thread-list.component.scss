@@ -1,0 +1,13 @@
+%date-heading {
+  color: grey;
+}
+
+.date-heading {
+  @extend %date-heading;
+  margin: 1em 0 1em 2em;
+}
+
+.date-heading-first {
+  @extend %date-heading;
+  margin: 0 0 1em 2em;
+}

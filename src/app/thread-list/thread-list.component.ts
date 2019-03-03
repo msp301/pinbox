@@ -30,6 +30,22 @@ export class ThreadListComponent implements OnInit {
     });
   }
 
+  private dateToName( date: Date ): string {
+    let name: string;
+    const thisYear = new Date().getFullYear();
+    const year = date.getFullYear();
+
+    if ( year === thisYear ) {
+      name = date.toLocaleDateString( 'en-gb', { month: 'long' } );
+    } else if ( thisYear - year <= 1 ) {
+      name = date.toLocaleDateString( 'en-gb', { month: 'long', year: 'numeric' } );
+    } else {
+      name = 'Earlier';
+    }
+
+    return name;
+  }
+
   getByLabel( id: string ) {
     this.service.getMessagesByLabel( id ).subscribe( threads => {
       threads.forEach( thread => {
@@ -39,6 +55,7 @@ export class ThreadListComponent implements OnInit {
           thread.messages.forEach( message => {
             this.list.push( {
               id: message.id,
+              month: this.dateToName( thread.newestDate ),
               author: thread.authors.join( ', ' ),
               subject: thread.subject,
             });
@@ -57,6 +74,7 @@ export class ThreadListComponent implements OnInit {
           thread.messages.forEach( message => {
             this.list.push( {
               id: message.id,
+              month: this.dateToName( thread.newestDate ),
               author: thread.authors.join( ', ' ),
               subject: thread.subject,
             });
