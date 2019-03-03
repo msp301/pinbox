@@ -85,8 +85,10 @@ func getMessage(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 	rawID, err := url.PathUnescape(vars["id"])
 
 	var msg *notmuch.Message
+	var msgFilename string
 	if err == nil {
 		msg, err = db.FindMessage(rawID)
+		msgFilename = msg.Filename()
 	}
 
 	if err != nil {
@@ -94,12 +96,13 @@ func getMessage(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 		return
 	}
 
-	file, err := os.Open(msg.Filename())
+	file, err := os.Open(msgFilename)
 
 	if err != nil {
 		log.Println(err)
 		return
 	}
+	defer file.Close()
 
 	env, err := enmime.ReadEnvelope(file)
 
@@ -113,11 +116,13 @@ func getMessage(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 		body = env.Text
 	}
 
+	encodedContent := base64.StdEncoding.EncodeToString([]byte(body))
+
 	payload := ourMessageContent{
 		ID:      msg.ID(),
 		Epoch:   msg.Date().Unix(),
 		Author:  msg.Header("From"),
-		Content: base64.StdEncoding.EncodeToString([]byte(body)),
+		Content: encodedContent,
 	}
 
 	content, err := json.Marshal(payload)
@@ -128,6 +133,7 @@ func getMessage(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 	}
 
 	handler(content, writer)
+	msg.Close()
 }
 
 func getMessages(writer http.ResponseWriter, req *http.Request, db *notmuch.DB, threads *notmuch.Threads) {
@@ -155,6 +161,7 @@ func getMessages(writer http.ResponseWriter, req *http.Request, db *notmuch.DB, 
 
 			messages = append(messages, message)
 		}
+		msgs.Close()
 
 		res := ourThread{
 			ID:         thr.ID(),
@@ -212,6 +219,7 @@ func main() {
 		}
 
 		getMessages(writer, req, db, threads)
+		threads.Close()
 	})
 
 	router.HandleFunc("/api/messages", func(writer http.ResponseWriter, req *http.Request) {
@@ -224,6 +232,7 @@ func main() {
 		}
 
 		getMessages(writer, req, db, threads)
+		threads.Close()
 	})
 
 	router.HandleFunc("/api/messages/{id}", func(writer http.ResponseWriter, req *http.Request) {
