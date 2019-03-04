@@ -22,6 +22,7 @@ import { MessageComponent } from './message/message.component';
 import { ThreadListComponent } from './thread-list/thread-list.component';
 
 const appRoutes: Routes = [
+  { path: '', redirectTo: 'messages/inbox', pathMatch: 'full' },
   { path: 'messages/:label', component: ThreadListComponent },
 ];
 
