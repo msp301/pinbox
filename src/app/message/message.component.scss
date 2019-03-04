@@ -14,18 +14,30 @@
 
 .mat-expansion-panel-header-title {
   display: flex;
-  justify-content: center;
+  flex-basis: 30%;
   flex-direction: column;
-  white-space: nowrap;
+  justify-content: center;
+  min-width: 100px;
+
+  p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .mat-expansion-panel-header-description {
   display: flex;
-  justify-content: center;
+  flex-basis: 70%;
   flex-direction: column;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  justify-content: center;
+  min-width: 0;
+
+  p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .mat-expansion-panel {

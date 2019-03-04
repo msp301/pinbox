@@ -1,7 +1,11 @@
 <mat-expansion-panel hideToggle="true" (click)="toggle()">
   <mat-expansion-panel-header>
-    <mat-panel-title>{{ title }}</mat-panel-title>
-    <mat-panel-description>{{ description }}</mat-panel-description>
+    <mat-panel-title>
+      <p>{{ title }}</p>
+    </mat-panel-title>
+    <mat-panel-description>
+      <p>{{ description }}</p>
+    </mat-panel-description>
     <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
   </mat-expansion-panel-header>
 
