@@ -10,7 +10,6 @@ import { ActivatedRoute } from '@angular/router';
 export class ThreadListComponent implements OnInit {
   list: any[] = [];
 
-
   constructor(
     private route: ActivatedRoute,
     private service: MailboxService,

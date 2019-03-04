@@ -9,8 +9,11 @@ import { Message } from '../core/message.model';
 })
 export class MessageComponent {
   @Input() id: string;
-  @Input() subject: string;
-  @Input() author: string;
+  @Input() title: string;
+  @Input() description: string;
+
+  subject: string;
+  author: string;
   content: string;
   date: Date;
 
