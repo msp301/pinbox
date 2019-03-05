@@ -1,27 +1,32 @@
 # Pinbox
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.3.
+Pinbox is a self-hosted webmail client greatly inspired by Google Inbox.
 
-## Development server
+*Warning: Currently under development*
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Prerequisites
 
-## Code scaffolding
+* Angular >= 7.3.3
+* Go (https://golang.org/)
+* notmuch (https://notmuchmail.org/)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Getting started
 
-## Build
+### Hosting your email
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Pinbox requires local access to a [Maildir](https://en.wikipedia.org/wiki/Maildir) directory. This can be setup with [OfflineIMAP](http://www.offlineimap.org/) or similar.
 
-## Running unit tests
+### Starting Pinbox
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Pinbox consists of a single page app to provide the web interface and [a server](https://github.com/msp301/pinbox-server) for handling access to your email.
 
-## Running end-to-end tests
+1. Clone 'pinbox' and '[pinbox-server](https://github.com/msp301/pinbox-server)'
+2. Start `pinbox-server` with `go build && ./pinbox-server <MAILDIR DIRECTORY>`
+3. Start `pinbox` client with `ng serve --proxy-config proxy.conf.json`
+4. Navigate to `http://localhost:4200`
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+The proxy config file `proxy.conf.json` is used by Angular to point API requests to `pinbox-server` without hard coding the hostname into the client code. By default this IS setup to use `localhost`.
 
-## Further help
+## License
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Licensed under GPL-3.0
