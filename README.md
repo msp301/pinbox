@@ -16,6 +16,9 @@ Pinbox is a self-hosted webmail client greatly inspired by Google Inbox.
 
 Pinbox requires local access to a [Maildir](https://en.wikipedia.org/wiki/Maildir) directory. This can be setup with [OfflineIMAP](http://www.offlineimap.org/) or similar.
 
+[Notmuch](https://notmuchmail.org/) mail indexer is used to provide fast email access and managing mailbox labels.
+Once you have `notmuch` installed on your system, run `notmuch new <MAILDIR DIRECTORY>` to initialise the `notmuch` database ready for Pinbox.
+
 ### Starting Pinbox
 
 Pinbox consists of a single page app to provide the web interface and [a server](https://github.com/msp301/pinbox-server) for handling access to your email.
