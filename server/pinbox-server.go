@@ -208,9 +208,28 @@ func main() {
 	})
 
 	router.Path("/api/messages").Queries("label", "{label}").HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
-		vars := mux.Vars(req)
+		url := req.URL
+		labels := url.Query()["label"]
 
-		query := db.NewQuery("tag:" + vars["label"])
+		var dbQuery = ""
+		for _, label := range labels {
+			if len(label) == 0 {
+				continue
+			}
+
+			if len(dbQuery) == 0 {
+				dbQuery = dbQuery + " tag:" + label
+			} else {
+				dbQuery = dbQuery + " and tag:" + label
+			}
+		}
+
+		if len(dbQuery) == 0 {
+			log.Println("No labels given")
+			return
+		}
+
+		query := db.NewQuery(dbQuery)
 		threads, err := query.Threads()
 
 		if err != nil {
