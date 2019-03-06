@@ -41,17 +41,7 @@
         <mat-icon>report</mat-icon> <span>Spam</span>
       </a>
       <mat-divider></mat-divider>
-      <h3 mat-subheader>Bundled in the inbox</h3>
-      <a mat-list-item href="">
-          <mat-icon>shopping_cart</mat-icon> <span>Purchases</span>
-      </a>
-      <mat-divider></mat-divider>
-      <h3 mat-subheader>Skip the inbox</h3>
-      <a mat-list-item href="">
-          <mat-icon>label</mat-icon> <span>Some rubbish</span>
-      </a>
-      <mat-divider></mat-divider>
-      <h3 mat-subheader>Unbundled</h3>
+      <h3 mat-subheader>Labels</h3>
       <a mat-list-item [routerLink]="['messages', label.name]" *ngFor="let label of labels">
           <mat-icon>label</mat-icon> <span>{{ label.name }}</span>
       </a>
