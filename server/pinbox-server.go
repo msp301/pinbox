@@ -66,7 +66,9 @@ func getLabels(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 	}
 
 	var payload []ourLabel
-	for _, name := range tags.Slice() {
+	tag := notmuch.Tag{}
+	for tags.Next(&tag) {
+		name := tag.Value
 		label := ourLabel{ID: name, Name: name}
 		payload = append(payload, label)
 	}
