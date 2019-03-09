@@ -47,6 +47,7 @@ type ourThread struct {
 type ourBundle struct {
 	ID      string       `json:"id"`
 	Type    string       `json:"type"`
+	Date    int64        `json:"date"`
 	Threads []*ourThread `json:"threads"`
 }
 
@@ -255,7 +256,12 @@ func main() {
 			}
 
 			month := fmt.Sprintf("%d %d", latestDate.Month(), latestDate.Year())
-			bundles[month] = &ourBundle{ID: label, Type: "bundle", Threads: bundled}
+			bundles[month] = &ourBundle{
+				ID:      label,
+				Type:    "bundle",
+				Date:    latestDate.Unix(),
+				Threads: bundled,
+			}
 		}
 
 		inbox := make([]interface{}, 0)
