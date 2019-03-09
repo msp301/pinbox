@@ -2,6 +2,12 @@
   color: grey;
 }
 
+.bundle {
+  .mat-expansion-panel-header-title p {
+    text-transform: capitalize;
+  }
+}
+
 .date-heading {
   @extend %date-heading;
   margin: 1em 0 1em 2em;

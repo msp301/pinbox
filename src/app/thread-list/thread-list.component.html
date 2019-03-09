@@ -6,7 +6,7 @@
     <app-message *ngIf="thread.subject" [id]="thread.id" [title]="thread.author" [description]="thread.subject"></app-message>
 
     <ng-container *ngIf="thread.threads">
-      <mat-expansion-panel hideToggle="true">
+      <mat-expansion-panel hideToggle="true" class="bundle">
         <mat-expansion-panel-header>
           <mat-panel-title>
             <p>{{ thread.id }}</p>
