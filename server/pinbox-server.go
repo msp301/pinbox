@@ -230,6 +230,7 @@ func main() {
 		query := db.NewQuery("tag:inbox and not tag:attachment")
 		threads, err := query.Threads()
 
+		// TODO: Update bundles structure to support multiple bundled labels
 		labels := []string{"attachment"}
 		bundles := make(map[string]*ourBundle)
 		for _, label := range labels {
@@ -247,7 +248,7 @@ func main() {
 			for res.Next(&thread) {
 				date := thread.NewestDate()
 
-				if date.Year() > latestDate.Year() && date.Month() > latestDate.Month() {
+				if date.Unix() > latestDate.Unix() {
 					latestDate = date
 				}
 
@@ -265,22 +266,23 @@ func main() {
 		}
 
 		inbox := make([]interface{}, 0)
-		prevMonth := ""
 		thread := notmuch.Thread{}
 		for threads.Next(&thread) {
 			date := thread.NewestDate()
 			month := fmt.Sprintf("%d %d", date.Month(), date.Year())
 
-			if month != prevMonth {
-				if bundles[prevMonth] != nil {
-					inbox = append(inbox, bundles[prevMonth])
+			if bundles[month] != nil {
+				bundleDate := bundles[month].Date
+
+				if bundleDate > date.Unix() {
+					// TODO: This won't work if the bundle contains the oldest messages
+					inbox = append(inbox, bundles[month])
 				}
 			}
 
 			thr := toOurThread(&thread)
 			thr.Type = "thread"
 			inbox = append(inbox, &thr)
-			prevMonth = month
 		}
 
 		if err != nil {
