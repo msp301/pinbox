@@ -1,5 +1,12 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { Thread } from '../core/thread.model';
+import { Bundle } from '../core/bundle.model';
+
+interface IBundleListItem {
+  id: string;
+  month: string;
+  threads: Thread[];
+}
 
 interface IThreadListItem {
   id: string;
@@ -15,21 +22,29 @@ interface IThreadListItem {
 })
 export class ThreadListComponent implements OnChanges {
   @Input() threads: Thread[];
-  list: IThreadListItem[];
+  list: ( IBundleListItem | IThreadListItem )[];
 
   constructor() { }
 
   ngOnChanges() {
     this.list = this.threads.map( thread => {
-      if ( thread.messages.length > 1 ) {
-        console.log( `SKIPPING ${thread.subject}` );
-      } else {
+      if ( thread instanceof Bundle ) {
         return {
-          id: thread.messages[0].id,
-          month: this.dateToName( thread.newestDate ),
-          author: thread.authors.join( ', ' ),
-          subject: thread.subject,
+          id: thread.id,
+          month: this.dateToName( thread.date ),
+          threads: thread.threads,
         };
+      } else {
+        if ( thread.messages.length > 1 ) {
+          console.log( `SKIPPING ${thread.subject}` );
+        } else {
+          return {
+            id: thread.messages[0].id,
+            month: this.dateToName( thread.newestDate ),
+            author: thread.authors.join( ', ' ),
+            subject: thread.subject,
+          };
+        }
       }
     });
   }
