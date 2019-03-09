@@ -1,0 +1,19 @@
+<div *ngFor="let thread of list; let i = index">
+  <div class="date-heading-first" *ngIf="i == 0">{{ thread.month }}</div>
+  <div class="date-heading" *ngIf="i != 0 && thread.month != list[i-1].month">{{ thread.month }}</div>
+
+    <app-message *ngIf="thread.subject" [id]="thread.id" [title]="thread.author" [description]="thread.subject"></app-message>
+
+    <ng-container *ngIf="thread.threads">
+      <mat-expansion-panel hideToggle="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <p>{{ thread.id }}</p>
+          </mat-panel-title>
+          <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
+        </mat-expansion-panel-header>
+
+        <app-thread-list [threads]="thread.threads"></app-thread-list>
+      </mat-expansion-panel>
+    </ng-container>
+</div>

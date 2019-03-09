@@ -20,9 +20,11 @@ import {
 import { MailboxService } from './mailbox.service';
 import { MessageComponent } from './message/message.component';
 import { ThreadListComponent } from './thread-list/thread-list.component';
+import { InboxComponent } from './inbox/inbox.component';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: 'messages/inbox', pathMatch: 'full' },
+  { path: '', redirectTo: 'inbox', pathMatch: 'full' },
+  { path: 'inbox', component: InboxComponent },
   { path: 'messages/:label', component: ThreadListComponent },
 ];
 
@@ -30,7 +32,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     MessageComponent,
-    ThreadListComponent
+    ThreadListComponent,
+    InboxComponent
   ],
   imports: [
     RouterModule.forRoot(

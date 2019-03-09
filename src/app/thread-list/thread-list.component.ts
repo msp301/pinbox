@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MailboxService } from '../mailbox.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./thread-list.component.scss']
 })
 export class ThreadListComponent implements OnInit {
+  @Input() threads: any[];
   list: any[] = [];
 
   constructor(
@@ -16,17 +17,25 @@ export class ThreadListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.paramMap.subscribe( params => {
-      const label = params.get( 'label' );
+    // TODO
+    // Split this out into multiple components ???
+    // Common behaviour is to display a thread list only.
+    // Source of thread list differs.
+    if ( this.threads ) {
+      this.list = this.threads;
+    } else {
+      this.route.paramMap.subscribe( params => {
+        const label = params.get( 'label' );
 
-      this.list = [];
+        this.list = [];
 
-      if ( label ) {
-        this.getByLabel( label );
-      } else {
-        this.getAll();
-      }
-    });
+        if ( label ) {
+          this.getByLabel( label );
+        } else {
+          this.getAll();
+        }
+      });
+    }
   }
 
   private dateToName( date: Date ): string {
