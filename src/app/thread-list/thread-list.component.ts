@@ -1,41 +1,37 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { MailboxService } from '../mailbox.service';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnChanges } from '@angular/core';
+import { Thread } from '../core/thread.model';
+
+interface IThreadListItem {
+  id: string;
+  month: string;
+  author: string;
+  subject: string;
+}
 
 @Component({
   selector: 'app-thread-list',
   templateUrl: './thread-list.component.html',
   styleUrls: ['./thread-list.component.scss']
 })
-export class ThreadListComponent implements OnInit {
-  @Input() threads: any[];
-  list: any[] = [];
+export class ThreadListComponent implements OnChanges {
+  @Input() threads: Thread[];
+  list: IThreadListItem[];
 
-  constructor(
-    private route: ActivatedRoute,
-    private service: MailboxService,
-  ) { }
+  constructor() { }
 
-  ngOnInit() {
-    // TODO
-    // Split this out into multiple components ???
-    // Common behaviour is to display a thread list only.
-    // Source of thread list differs.
-    if ( this.threads ) {
-      this.list = this.threads;
-    } else {
-      this.route.paramMap.subscribe( params => {
-        const label = params.get( 'label' );
-
-        this.list = [];
-
-        if ( label ) {
-          this.getByLabel( label );
-        } else {
-          this.getAll();
-        }
-      });
-    }
+  ngOnChanges() {
+    this.list = this.threads.map( thread => {
+      if ( thread.messages.length > 1 ) {
+        console.log( `SKIPPING ${thread.subject}` );
+      } else {
+        return {
+          id: thread.messages[0].id,
+          month: this.dateToName( thread.newestDate ),
+          author: thread.authors.join( ', ' ),
+          subject: thread.subject,
+        };
+      }
+    });
   }
 
   private dateToName( date: Date ): string {
@@ -52,43 +48,5 @@ export class ThreadListComponent implements OnInit {
     }
 
     return name;
-  }
-
-  getByLabel( id: string ) {
-    this.service.getMessagesByLabel( id ).subscribe( threads => {
-      threads.forEach( thread => {
-        if ( thread.messages.length > 1 ) {
-          console.log( `SKIPPING ${thread.subject}` );
-        } else {
-          thread.messages.forEach( message => {
-            this.list.push( {
-              id: message.id,
-              month: this.dateToName( thread.newestDate ),
-              author: thread.authors.join( ', ' ),
-              subject: thread.subject,
-            });
-          });
-        }
-      });
-    });
-  }
-
-  getAll() {
-    this.service.getMessages().subscribe( threads => {
-      threads.forEach( thread => {
-        if ( thread.messages.length > 1 ) {
-          console.log( `SKIPPING ${thread.subject}` );
-        } else {
-          thread.messages.forEach( message => {
-            this.list.push( {
-              id: message.id,
-              month: this.dateToName( thread.newestDate ),
-              author: thread.authors.join( ', ' ),
-              subject: thread.subject,
-            });
-          });
-        }
-      });
-    });
   }
 }

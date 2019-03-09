@@ -21,11 +21,12 @@ import { MailboxService } from './mailbox.service';
 import { MessageComponent } from './message/message.component';
 import { ThreadListComponent } from './thread-list/thread-list.component';
 import { InboxComponent } from './inbox/inbox.component';
+import { LabelResultsComponent } from './label-results/label-results.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'inbox', pathMatch: 'full' },
   { path: 'inbox', component: InboxComponent },
-  { path: 'messages/:label', component: ThreadListComponent },
+  { path: 'messages/:label', component: LabelResultsComponent },
 ];
 
 @NgModule({
@@ -33,7 +34,8 @@ const appRoutes: Routes = [
     AppComponent,
     MessageComponent,
     ThreadListComponent,
-    InboxComponent
+    InboxComponent,
+    LabelResultsComponent
   ],
   imports: [
     RouterModule.forRoot(
