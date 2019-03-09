@@ -21,3 +21,36 @@
 .list-item {
   margin-bottom: 0.2em;
 }
+
+.mat-expansion-panel-header {
+  display: flex;
+  align-items: center;
+}
+
+.mat-expansion-panel-header-title {
+  display: flex;
+  flex-basis: 30%;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-width: 100px;
+
+  p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.mat-expansion-panel-header-description {
+  display: flex;
+  flex-basis: 70%;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-width: 0;
+
+  p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
