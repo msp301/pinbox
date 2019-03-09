@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, ViewEncapsulation } from '@angular/core';
 import { Thread } from '../core/thread.model';
 import { Bundle } from '../core/bundle.model';
 
@@ -18,7 +18,8 @@ interface IThreadListItem {
 @Component({
   selector: 'app-thread-list',
   templateUrl: './thread-list.component.html',
-  styleUrls: ['./thread-list.component.scss']
+  styleUrls: ['./thread-list.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ThreadListComponent implements OnChanges {
   @Input() threads: Thread[];

@@ -8,6 +8,13 @@
   }
 }
 
+@media only screen and (max-width: 600px) {
+  .bundle .mat-expansion-panel-body {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+}
+
 .date-heading {
   @extend %date-heading;
   margin: 1em 0 1em 2em;
