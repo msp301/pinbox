@@ -9,7 +9,7 @@ import { Thread } from '../core/thread.model';
   styleUrls: ['./inbox.component.scss']
 })
 export class InboxComponent implements OnInit {
-  list: any[] = []
+  list: any[] = [];
 
   constructor(
     private service: MailboxService,
