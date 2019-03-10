@@ -12,10 +12,19 @@ import (
 	"sort"
 	"time"
 
+	"github.com/BurntSushi/toml"
 	"github.com/gorilla/mux"
 	"github.com/jhillyerd/enmime"
 	notmuch "github.com/msp301/go.notmuch"
 )
+
+type config struct {
+	Maildir string
+	Port    int
+	Inbox   string
+	Bundle  []string
+	Hidden  []string
+}
 
 type ourLabel struct {
 	ID   string `json:"id"`
@@ -70,16 +79,24 @@ func openIndexDatabase(path string) *notmuch.DB {
 	return db
 }
 
-func getLabels(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
+func getLabels(writer http.ResponseWriter, req *http.Request, db *notmuch.DB, config config) {
 	tags, err := db.Tags()
 	if err != nil {
 		log.Println("Error getting tags")
+	}
+
+	hidden := make(map[string]int, 0)
+	for _, label := range config.Hidden {
+		hidden[label] = 1
 	}
 
 	var payload []ourLabel
 	tag := notmuch.Tag{}
 	for tags.Next(&tag) {
 		name := tag.Value
+		if hidden[name] == 1 {
+			continue
+		}
 		label := ourLabel{ID: name, Name: name}
 		payload = append(payload, label)
 	}
@@ -216,7 +233,14 @@ func handler(body []byte, writer http.ResponseWriter) {
 
 func main() {
 	args := os.Args[1:]
-	dir, err := filepath.Abs(args[0])
+	configPath := args[0]
+
+	var config config
+	if _, err := toml.DecodeFile(configPath, &config); err != nil {
+		log.Fatal(err)
+	}
+
+	dir, err := filepath.Abs(config.Maildir)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -227,11 +251,12 @@ func main() {
 	router.UseEncodedPath()
 
 	router.HandleFunc("/api/inbox", func(writer http.ResponseWriter, req *http.Request) {
-		// Labels to bundle in the inbox
-		// TODO: Get labels to bundle from a config file
-		labels := []string{}
+		inboxLabel := config.Inbox
 
-		queryString := "tag:inbox"
+		// Labels to bundle in the inbox
+		labels := config.Bundle
+
+		queryString := "tag:" + inboxLabel
 		for _, label := range labels {
 			queryString += " and not tag:" + label
 		}
@@ -241,7 +266,7 @@ func main() {
 
 		bundles := make(map[string][]*ourBundle)
 		for _, label := range labels {
-			bundle := db.NewQuery("tag:inbox and tag:" + label)
+			bundle := db.NewQuery("tag:" + inboxLabel + " and tag:" + label)
 			res, err := bundle.Threads()
 
 			if err != nil {
@@ -340,7 +365,7 @@ func main() {
 	})
 
 	router.HandleFunc("/api/labels", func(writer http.ResponseWriter, req *http.Request) {
-		getLabels(writer, req, db)
+		getLabels(writer, req, db, config)
 	})
 
 	router.Path("/api/messages").Queries("label", "{label}").HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
@@ -394,5 +419,6 @@ func main() {
 		getMessage(writer, req, db)
 	})
 
-	log.Fatal(http.ListenAndServe(":8000", router))
+	port := fmt.Sprintf(":%d", config.Port)
+	log.Fatal(http.ListenAndServe(port, router))
 }

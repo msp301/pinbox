@@ -1,0 +1,17 @@
+maildir = "/home/example/mail"
+port = 8000
+
+# Label to use for inbox
+inbox = "inbox"
+
+# Bundle messages in the inbox with these labels
+bundle = [
+  "forums",
+]
+
+# Labels to not include in label list
+hidden = [
+  "inbox",
+  "unread",
+  "attachment",
+]
