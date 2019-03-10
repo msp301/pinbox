@@ -227,8 +227,11 @@ func main() {
 	router.UseEncodedPath()
 
 	router.HandleFunc("/api/inbox", func(writer http.ResponseWriter, req *http.Request) {
+		// Labels to bundle in the inbox
+		// TODO: Get labels to bundle from a config file
+		labels := []string{}
+
 		queryString := "tag:inbox"
-		labels := []string{"attachment", "bundle"}
 		for _, label := range labels {
 			queryString += " and not tag:" + label
 		}
