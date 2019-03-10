@@ -280,7 +280,29 @@ func main() {
 
 		inbox := make([]interface{}, 0)
 		thread := notmuch.Thread{}
-		for threads.Next(&thread) {
+		var prevDate time.Time
+		for true {
+			if !threads.Next(&thread) {
+				// We have already added all top-level threads.
+				// There may still be bundles that have not been included.
+				// Flush out any remaining bundles that are older than our last top-level thread.
+				keys := make([]string, 0)
+				for key := range bundles {
+					keys = append(keys, key)
+				}
+				sort.Sort(sort.Reverse(sort.StringSlice(keys)))
+
+				for _, key := range keys {
+					for _, bundle := range bundles[key] {
+						if bundle.Date < prevDate.Unix() {
+							inbox = append(inbox, bundle)
+						}
+					}
+				}
+
+				break
+			}
+
 			date := thread.NewestDate()
 			month := fmt.Sprintf("%d %d", date.Month(), date.Year())
 
@@ -289,7 +311,6 @@ func main() {
 					bundleDate := bundle.Date
 
 					if bundleDate > date.Unix() {
-						// TODO: This won't work if the bundle contains the oldest messages
 						inbox = append(inbox, bundle)
 					}
 				}
@@ -298,6 +319,7 @@ func main() {
 			thr := toOurThread(&thread)
 			thr.Type = "thread"
 			inbox = append(inbox, &thr)
+			prevDate = date
 		}
 
 		if err != nil {
