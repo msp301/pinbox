@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"sort"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -227,14 +228,18 @@ func main() {
 	router.UseEncodedPath()
 
 	router.HandleFunc("/api/inbox", func(writer http.ResponseWriter, req *http.Request) {
-		query := db.NewQuery("tag:inbox and not tag:attachment")
+		queryString := "tag:inbox"
+		labels := []string{"attachment", "bundle"}
+		for _, label := range labels {
+			queryString += " and not tag:" + label
+		}
+
+		query := db.NewQuery(queryString)
 		threads, err := query.Threads()
 
-		// TODO: Update bundles structure to support multiple bundled labels
-		labels := []string{"attachment"}
-		bundles := make(map[string]*ourBundle)
+		bundles := make(map[string][]*ourBundle)
 		for _, label := range labels {
-			bundle := db.NewQuery("tag:" + label)
+			bundle := db.NewQuery("tag:inbox and tag:" + label)
 			res, err := bundle.Threads()
 
 			if err != nil {
@@ -257,12 +262,20 @@ func main() {
 			}
 
 			month := fmt.Sprintf("%d %d", latestDate.Month(), latestDate.Year())
-			bundles[month] = &ourBundle{
-				ID:      label,
-				Type:    "bundle",
-				Date:    latestDate.Unix(),
-				Threads: bundled,
-			}
+			bundles[month] = append(
+				bundles[month],
+				&ourBundle{
+					ID:      label,
+					Type:    "bundle",
+					Date:    latestDate.Unix(),
+					Threads: bundled,
+				})
+		}
+
+		for key := range bundles {
+			sort.Slice(bundles[key], func(i, j int) bool {
+				return bundles[key][i].Date > bundles[key][j].Date
+			})
 		}
 
 		inbox := make([]interface{}, 0)
@@ -271,12 +284,14 @@ func main() {
 			date := thread.NewestDate()
 			month := fmt.Sprintf("%d %d", date.Month(), date.Year())
 
-			if bundles[month] != nil {
-				bundleDate := bundles[month].Date
+			if len(bundles[month]) > 0 {
+				for _, bundle := range bundles[month] {
+					bundleDate := bundle.Date
 
-				if bundleDate > date.Unix() {
-					// TODO: This won't work if the bundle contains the oldest messages
-					inbox = append(inbox, bundles[month])
+					if bundleDate > date.Unix() {
+						// TODO: This won't work if the bundle contains the oldest messages
+						inbox = append(inbox, bundle)
+					}
 				}
 			}
 
