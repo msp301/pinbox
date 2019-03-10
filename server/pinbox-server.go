@@ -288,15 +288,17 @@ func main() {
 				bundled = append(bundled, &thr)
 			}
 
-			month := fmt.Sprintf("%d %d", latestDate.Month(), latestDate.Year())
-			bundles[month] = append(
-				bundles[month],
-				&ourBundle{
-					ID:      label,
-					Type:    "bundle",
-					Date:    latestDate.Unix(),
-					Threads: bundled,
-				})
+			if len(bundled) > 0 {
+				month := fmt.Sprintf("%d %d", latestDate.Month(), latestDate.Year())
+				bundles[month] = append(
+					bundles[month],
+					&ourBundle{
+						ID:      label,
+						Type:    "bundle",
+						Date:    latestDate.Unix(),
+						Threads: bundled,
+					})
+			}
 		}
 
 		for key := range bundles {
