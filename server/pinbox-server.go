@@ -214,7 +214,6 @@ func handler(body []byte, writer http.ResponseWriter) {
 	return
 }
 
-// our main function
 func main() {
 	args := os.Args[1:]
 	dir, err := filepath.Abs(args[0])
