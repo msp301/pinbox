@@ -24,7 +24,7 @@ Once you have `notmuch` installed on your system, run `notmuch new <MAILDIR DIRE
 Pinbox consists of a single page app to provide the web interface and [a server](https://github.com/msp301/pinbox-server) for handling access to your email.
 
 1. Clone 'pinbox' and '[pinbox-server](https://github.com/msp301/pinbox-server)'
-2. Start `pinbox-server` with `go build && ./pinbox-server <MAILDIR DIRECTORY>`
+2. Start `pinbox-server` with `go build && ./pinbox-server <CONFIG FILE>`
 3. Start `pinbox` client with `ng serve --proxy-config proxy.conf.json`
 4. Navigate to `http://localhost:4200`
 
