@@ -1,3 +1,8 @@
+<mat-menu #messageActions="matMenu">
+  <h3 class="heading">Move to ...</h3>
+  <button mat-menu-item *ngFor="let label of newLabels">{{ label.name }}</button>
+</mat-menu>
+
 <mat-expansion-panel hideToggle="true" (click)="toggle()">
   <mat-expansion-panel-header>
     <mat-panel-title>
@@ -6,7 +11,9 @@
     <mat-panel-description>
       <p>{{ description }}</p>
     </mat-panel-description>
-    <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
+    <div class="controls" (click)="$event.stopPropagation()">
+      <button mat-icon-button [matMenuTriggerFor]="messageActions"><mat-icon>more_vert</mat-icon></button>
+    </div>
   </mat-expansion-panel-header>
 
   <div class="content-header">

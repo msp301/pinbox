@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MailboxService } from '../mailbox.service';
 import { Message } from '../core/message.model';
+import { Label } from '../core/label.model';
 
 @Component({
   selector: 'app-message',
@@ -17,9 +18,13 @@ export class MessageComponent {
   content: string;
   date: Date;
 
+  newLabels: Label[];
+
   constructor(
     private service: MailboxService,
-  ) { }
+  ) {
+    service.getLabels().subscribe( value => this.newLabels = value );
+  }
 
   toggle() {
     if ( ! this.content ) {

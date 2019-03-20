@@ -15,7 +15,8 @@ import {
   MatSidenavModule,
   MatToolbarModule,
   MatIconModule,
-  MatCardModule
+  MatCardModule,
+  MatMenuModule
 } from '@angular/material';
 import { MailboxService } from './mailbox.service';
 import { MessageComponent } from './message/message.component';
@@ -50,6 +51,7 @@ const appRoutes: Routes = [
     MatExpansionModule,
     MatInputModule,
     MatListModule,
+    MatMenuModule,
     MatSlideToggleModule,
     MatSidenavModule,
     MatToolbarModule,
