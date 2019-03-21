@@ -1,0 +1,29 @@
+swagger: "2.0"
+info:
+  description: "Backend API for Pinbox webmail"
+  title: "Pinbox Server"
+  version: "1.0.0"
+
+basePath: "/api/"
+tags:
+- name: "labels"
+  description: "Labels available to categorise messages"
+- name: "messages"
+  description: "Email message threads"
+schemes:
+- "https"
+- "http"
+paths:
+  /labels:
+    post:
+      tags:
+      - "labels"
+      summary: "All labels available for categorising email messages and threads"
+      description: ""
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
