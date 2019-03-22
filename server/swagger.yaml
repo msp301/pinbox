@@ -4,7 +4,16 @@ info:
   title: "Pinbox Server"
   version: "1.0.0"
 
-basePath: "/api/"
+definitions:
+  Label:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+
+basePath: "/api"
 tags:
 - name: "labels"
   description: "Labels available to categorise messages"
@@ -15,15 +24,17 @@ schemes:
 - "http"
 paths:
   /labels:
-    post:
+    get:
       tags:
       - "labels"
       summary: "All labels available for categorising email messages and threads"
       description: ""
-      consumes:
-      - "application/json"
       produces:
       - "application/json"
       responses:
         200:
           description: "Success"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Label"
