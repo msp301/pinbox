@@ -10,6 +10,21 @@ definitions:
     format: int64
     example: 1553292839
 
+  Bundle:
+    type: object
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+        example: "bundle"
+      date:
+        $ref: "#/definitions/epoch"
+      threads:
+        type: array
+        items:
+          $ref: "#/definitions/Thread"
+
   Label:
     type: object
     properties:
@@ -50,6 +65,7 @@ definitions:
         type: string
       type:
         type: string
+        example: "thread"
       subject:
         type: string
       newestDate:
@@ -90,6 +106,21 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Label"
+  /inbox:
+    get:
+      tags:
+        - "inbox"
+      summary: "Access all messages in email inbox"
+      description: "Retrieve messages with the 'inbox' label"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: array
+            items:
+              anyOf:
+                - $ref: "#/definitions/Thread"
+                - $ref: "#/definitions/Bundle"
   /messages:
     get:
       tags:
