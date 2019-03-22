@@ -5,6 +5,11 @@ info:
   version: "1.0.0"
 
 definitions:
+  epoch:
+    type: number
+    format: int64
+    example: 1553292839
+
   Label:
     type: object
     properties:
@@ -12,6 +17,53 @@ definitions:
         type: string
       name:
         type: string
+
+  Message:
+    type: object
+    properties:
+      id:
+        type: string
+      epoch:
+        $ref: "#/definitions/epoch"
+      files:
+        type: array
+        items:
+          type: string
+
+  MessageContent:
+    type: object
+    properties:
+      id:
+        type: string
+      epoch:
+        $ref: "#/definitions/epoch"
+      author:
+        type: string
+      content:
+        type: string
+        format: byte # base64-encoded email body
+
+  Thread:
+    type: object
+    properties:
+      id:
+        type: string
+      type:
+        type: string
+      subject:
+        type: string
+      newestDate:
+        $ref: "#/definitions/epoch"
+      oldestDate:
+        $ref: "#/definitions/epoch"
+      authors:
+        type: array
+        items:
+          type: string
+      messages:
+        type: array
+        items:
+          $ref: "#/definitions/Message"
 
 basePath: "/api"
 tags:
@@ -38,3 +90,33 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Label"
+  /messages:
+    get:
+      tags:
+        - "messages"
+      summary: "Access email threads"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Thread"
+  /messages/{id}:
+    get:
+      tags:
+        - "messages"
+      summary: "Access individual email"
+      parameters:
+        - in: path
+          name: id
+          type: string
+          description: "Message ID"
+          required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/MessageContent"
