@@ -171,7 +171,7 @@ func toOurThread(thr *notmuch.Thread) ourThread {
 
 	var messages []ourMessage
 	msg := notmuch.Message{}
-	msgs := thr.TopLevelMessages()
+	msgs := thr.Messages()
 	for msgs.Next(&msg) {
 		var files []string
 		file := ""
