@@ -23,6 +23,7 @@ import { MessageComponent } from './message/message.component';
 import { ThreadListComponent } from './thread-list/thread-list.component';
 import { InboxComponent } from './inbox/inbox.component';
 import { LabelResultsComponent } from './label-results/label-results.component';
+import { ThreadComponent } from './thread/thread.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'inbox', pathMatch: 'full' },
@@ -36,7 +37,8 @@ const appRoutes: Routes = [
     MessageComponent,
     ThreadListComponent,
     InboxComponent,
-    LabelResultsComponent
+    LabelResultsComponent,
+    ThreadComponent
   ],
   imports: [
     RouterModule.forRoot(

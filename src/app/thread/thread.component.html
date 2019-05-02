@@ -1,0 +1,27 @@
+<mat-menu #messageActions="matMenu">
+  <h3 class="heading">Move to ...</h3>
+  <button mat-menu-item *ngFor="let label of newLabels">{{ label.name }}</button>
+</mat-menu>
+
+<mat-expansion-panel hideToggle="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <p>{{ title }}</p>
+    </mat-panel-title>
+    <mat-panel-description>
+      <p>{{ description }}</p>
+    </mat-panel-description>
+    <button mat-icon-button (click)="$event.stopPropagation()"><i class="fas fa-thumbtack"></i></button>
+    <button mat-icon-button [matMenuTriggerFor]="messageActions" (click)="$event.stopPropagation()"><mat-icon>more_vert</mat-icon></button>
+  </mat-expansion-panel-header>
+
+  <div class="content-header">
+    <span>{{ author }}</span>
+    <span class="fill"></span>
+    <span class="date">{{ date | date:"medium" }}</span>
+  </div>
+
+  <mat-accordion>
+    <app-message *ngFor="let msgId of messages; let idx = index" [id]="msgId" [title]="authors[idx]"></app-message>
+  </mat-accordion>
+</mat-expansion-panel>

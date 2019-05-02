@@ -11,8 +11,9 @@ interface IBundleListItem {
 interface IThreadListItem {
   id: string;
   month: string;
-  author: string;
+  authors: string[];
   subject: string;
+  messages?: string[];
 }
 
 @Component({
@@ -37,12 +38,18 @@ export class ThreadListComponent implements OnChanges {
         };
       } else {
         if ( thread.messages.length > 1 ) {
-          console.log( `SKIPPING ${thread.subject}` );
+          return {
+            id: thread.id,
+            month: this.dateToName( thread.newestDate ),
+            authors: thread.authors,
+            subject: thread.subject,
+            messages: thread.messages.map( msg => msg.id ),
+          };
         } else {
           return {
             id: thread.messages[0].id,
             month: this.dateToName( thread.newestDate ),
-            author: thread.authors.join( ', ' ),
+            authors: thread.authors,
             subject: thread.subject,
           };
         }

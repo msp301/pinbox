@@ -3,7 +3,9 @@
   <div class="date-heading" *ngIf="i != 0 && thread.month != list[i-1].month">{{ thread.month }}</div>
 
   <div class="list-item">
-    <app-message *ngIf="thread.subject" [id]="thread.id" [title]="thread.author" [description]="thread.subject"></app-message>
+    <app-message *ngIf="thread.subject && !thread.messages" [id]="thread.id" [title]="thread.authors.join(', ')" [description]="thread.subject"></app-message>
+
+    <app-thread *ngIf="thread.messages?.length > 1" [id]="thread.id" [title]="thread.authors.join(', ')" [description]="thread.subject" [authors]="thread.authors" [messages]="thread.messages"></app-thread>
 
     <ng-container *ngIf="thread.threads">
       <mat-expansion-panel hideToggle="true" class="bundle">
