@@ -118,11 +118,14 @@ func getMessage(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 	var msgFilename string
 	if err == nil {
 		msg, err = db.FindMessage(rawID)
-		msgFilename = msg.Filename()
+
+		if err == nil {
+			msgFilename = msg.Filename()
+		}
 	}
 
 	if err != nil {
-		log.Println(err)
+		log.Println(fmt.Sprintf("%s: %s", rawID, err))
 		return
 	}
 
