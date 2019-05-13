@@ -7,11 +7,10 @@ import { Message } from '@angular/compiler/src/i18n/i18n_ast';
   templateUrl: './thread.component.html',
   styleUrls: ['./thread.component.scss']
 })
-export class ThreadComponent extends MessageComponent implements OnInit {
+export class ThreadComponent extends MessageComponent {
   @Input() authors: string[];
   @Input() messages: Message[];
 
-  ngOnInit() {
-    this.toggle();
-  }
+  // TODO: Consider whether this should be a subclass of a Message
+  toggle() {}
 }
