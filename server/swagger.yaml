@@ -1,4 +1,4 @@
-swagger: "2.0"
+openapi: "3.0.0"
 info:
   description: "Backend API for Pinbox webmail"
   title: "Pinbox Server"
@@ -97,15 +97,15 @@ paths:
       - "labels"
       summary: "All labels available for categorising email messages and threads"
       description: ""
-      produces:
-      - "application/json"
       responses:
         200:
           description: "Success"
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Label"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Label"
   /inbox:
     get:
       tags:
@@ -115,12 +115,14 @@ paths:
       responses:
         200:
           description: "Success"
-          schema:
-            type: array
-            items:
-              anyOf:
-                - $ref: "#/definitions/Thread"
-                - $ref: "#/definitions/Bundle"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: "#/definitions/Thread"
+                    - $ref: "#/definitions/Bundle"
   /messages:
     get:
       tags:
@@ -129,10 +131,12 @@ paths:
       responses:
         200:
           description: "Success"
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Thread"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Thread"
   /messages/{id}:
     get:
       tags:
@@ -141,13 +145,16 @@ paths:
       parameters:
         - in: path
           name: id
-          type: string
           description: "Message ID"
           required: true
+          schema:
+            type: string
       responses:
         200:
           description: "Success"
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/MessageContent"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/MessageContent"
