@@ -4,92 +4,93 @@ info:
   title: "Pinbox Server"
   version: "1.0.0"
 
-definitions:
-  epoch:
-    type: number
-    format: int64
-    example: 1553292839
+servers:
+  - url: /api
 
-  Bundle:
-    type: object
-    properties:
-      id:
-        type: string
-      type:
-        type: string
-        example: "bundle"
-      date:
-        $ref: "#/definitions/epoch"
-      threads:
-        type: array
-        items:
-          $ref: "#/definitions/Thread"
+components:
+  schemas:
+    epoch:
+      type: number
+      format: int64
+      example: 1553292839
 
-  Label:
-    type: object
-    properties:
-      id:
-        type: string
-      name:
-        type: string
+    Bundle:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          example: "bundle"
+        date:
+          $ref: "#/components/schemas/epoch"
+        threads:
+          type: array
+          items:
+            $ref: "#/components/schemas/Thread"
 
-  Message:
-    type: object
-    properties:
-      id:
-        type: string
-      epoch:
-        $ref: "#/definitions/epoch"
-      files:
-        type: array
-        items:
+    Label:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
           type: string
 
-  MessageContent:
-    type: object
-    properties:
-      id:
-        type: string
-      epoch:
-        $ref: "#/definitions/epoch"
-      author:
-        type: string
-      content:
-        type: string
-        format: byte # base64-encoded email body
-
-  Thread:
-    type: object
-    properties:
-      id:
-        type: string
-      type:
-        type: string
-        example: "thread"
-      subject:
-        type: string
-      newestDate:
-        $ref: "#/definitions/epoch"
-      oldestDate:
-        $ref: "#/definitions/epoch"
-      authors:
-        type: array
-        items:
+    Message:
+      type: object
+      properties:
+        id:
           type: string
-      messages:
-        type: array
-        items:
-          $ref: "#/definitions/Message"
+        epoch:
+          $ref: "#/components/schemas/epoch"
+        files:
+          type: array
+          items:
+            type: string
 
-basePath: "/api"
+    MessageContent:
+      type: object
+      properties:
+        id:
+          type: string
+        epoch:
+          $ref: "#/components/schemas/epoch"
+        author:
+          type: string
+        content:
+          type: string
+          format: byte # base64-encoded email body
+
+    Thread:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          example: "thread"
+        subject:
+          type: string
+        newestDate:
+          $ref: "#/components/schemas/epoch"
+        oldestDate:
+          $ref: "#/components/schemas/epoch"
+        authors:
+          type: array
+          items:
+            type: string
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/Message"
+
 tags:
 - name: "labels"
   description: "Labels available to categorise messages"
 - name: "messages"
   description: "Email message threads"
-schemes:
-- "https"
-- "http"
+
 paths:
   /labels:
     get:
@@ -105,7 +106,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/definitions/Label"
+                  $ref: "#/components/schemas/Label"
   /inbox:
     get:
       tags:
@@ -121,8 +122,8 @@ paths:
                 type: array
                 items:
                   anyOf:
-                    - $ref: "#/definitions/Thread"
-                    - $ref: "#/definitions/Bundle"
+                    - $ref: "#/components/schemas/Thread"
+                    - $ref: "#/components/schemas/Bundle"
   /messages:
     get:
       tags:
@@ -136,7 +137,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/definitions/Thread"
+                  $ref: "#/components/schemas/Thread"
   /messages/{id}:
     get:
       tags:
@@ -157,4 +158,4 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/definitions/MessageContent"
+                  $ref: "#/components/schemas/MessageContent"
