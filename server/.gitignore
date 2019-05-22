@@ -1,3 +1,6 @@
+# Config files
+*.toml
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
