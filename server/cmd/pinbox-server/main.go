@@ -16,50 +16,9 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jhillyerd/enmime"
 	notmuch "github.com/msp301/go.notmuch"
+
+	"github.com/msp301/pinbox-server"
 )
-
-type config struct {
-	Maildir string
-	Port    int
-	Inbox   string
-	Bundle  []string
-	Hidden  []string
-}
-
-type ourLabel struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
-type ourMessage struct {
-	ID    string   `json:"id"`
-	Epoch int64    `json:"epoch"`
-	Files []string `json:"files"`
-}
-
-type ourMessageContent struct {
-	ID      string `json:"id"`
-	Epoch   int64  `json:"epoch"`
-	Author  string `json:"author"`
-	Content string `json:"content"`
-}
-
-type ourThread struct {
-	ID         string       `json:"id"`
-	Type       string       `json:"type"`
-	Subject    string       `json:"subject"`
-	NewestDate int64        `json:"newestDate"`
-	OldestDate int64        `json:"oldestDate"`
-	Authors    []string     `json:"authors"`
-	Messages   []ourMessage `json:"messages"`
-}
-
-type ourBundle struct {
-	ID      string       `json:"id"`
-	Type    string       `json:"type"`
-	Date    int64        `json:"date"`
-	Threads []*ourThread `json:"threads"`
-}
 
 func openIndexDatabase(path string) *notmuch.DB {
 	var db *notmuch.DB
@@ -79,7 +38,7 @@ func openIndexDatabase(path string) *notmuch.DB {
 	return db
 }
 
-func getLabels(writer http.ResponseWriter, req *http.Request, db *notmuch.DB, config config) {
+func getLabels(writer http.ResponseWriter, req *http.Request, db *notmuch.DB, config pinbox.Config) {
 	tags, err := db.Tags()
 	if err != nil {
 		log.Println("Error getting tags")
@@ -90,14 +49,14 @@ func getLabels(writer http.ResponseWriter, req *http.Request, db *notmuch.DB, co
 		hidden[label] = 1
 	}
 
-	var payload []ourLabel
+	var payload []pinbox.Label
 	tag := notmuch.Tag{}
 	for tags.Next(&tag) {
 		name := tag.Value
 		if hidden[name] == 1 {
 			continue
 		}
-		label := ourLabel{ID: name, Name: name}
+		label := pinbox.Label{ID: name, Name: name}
 		payload = append(payload, label)
 	}
 	content, err := json.Marshal(payload)
@@ -151,7 +110,7 @@ func getMessage(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 
 	encodedContent := base64.StdEncoding.EncodeToString([]byte(body))
 
-	payload := ourMessageContent{
+	payload := pinbox.MessageContent{
 		ID:      msg.ID(),
 		Epoch:   msg.Date().Unix(),
 		Author:  msg.Header("From"),
@@ -169,10 +128,10 @@ func getMessage(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 	msg.Close()
 }
 
-func toOurThread(thr *notmuch.Thread) ourThread {
+func toOurThread(thr *notmuch.Thread) pinbox.Thread {
 	_, authors := thr.Authors()
 
-	var messages []ourMessage
+	var messages []pinbox.Message
 	msg := notmuch.Message{}
 	msgs := thr.Messages()
 	for msgs.Next(&msg) {
@@ -183,7 +142,7 @@ func toOurThread(thr *notmuch.Thread) ourThread {
 			files = append(files, file)
 		}
 
-		message := ourMessage{
+		message := pinbox.Message{
 			ID:    msg.ID(),
 			Epoch: msg.Date().Unix(),
 			Files: files,
@@ -193,7 +152,7 @@ func toOurThread(thr *notmuch.Thread) ourThread {
 	}
 	msgs.Close()
 
-	res := ourThread{
+	res := pinbox.Thread{
 		ID:         thr.ID(),
 		Subject:    thr.Subject(),
 		NewestDate: thr.NewestDate().Unix(),
@@ -205,8 +164,8 @@ func toOurThread(thr *notmuch.Thread) ourThread {
 	return res
 }
 
-func toOurThreads(threads *notmuch.Threads) []ourThread {
-	var payload []ourThread
+func toOurThreads(threads *notmuch.Threads) []pinbox.Thread {
+	var payload []pinbox.Thread
 	thr := notmuch.Thread{}
 	for threads.Next(&thr) {
 		res := toOurThread(&thr)
@@ -238,7 +197,7 @@ func main() {
 	args := os.Args[1:]
 	configPath := args[0]
 
-	var config config
+	var config pinbox.Config
 	if _, err := toml.DecodeFile(configPath, &config); err != nil {
 		log.Fatal(err)
 	}
@@ -267,7 +226,7 @@ func main() {
 		query := db.NewQuery(queryString)
 		threads, err := query.Threads()
 
-		bundles := make(map[string][]*ourBundle)
+		bundles := make(map[string][]*pinbox.Bundle)
 		for _, label := range labels {
 			bundle := db.NewQuery("tag:" + inboxLabel + " and tag:" + label)
 			res, err := bundle.Threads()
@@ -277,7 +236,7 @@ func main() {
 				continue
 			}
 
-			bundled := make([]*ourThread, 0)
+			bundled := make([]*pinbox.Thread, 0)
 			var latestDate time.Time
 			thread := notmuch.Thread{}
 			for res.Next(&thread) {
@@ -295,7 +254,7 @@ func main() {
 				month := fmt.Sprintf("%d %d", latestDate.Month(), latestDate.Year())
 				bundles[month] = append(
 					bundles[month],
-					&ourBundle{
+					&pinbox.Bundle{
 						ID:      label,
 						Type:    "bundle",
 						Date:    latestDate.Unix(),
