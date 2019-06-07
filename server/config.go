@@ -12,7 +12,7 @@ type Config struct {
 	Hidden  []string
 }
 
-func readConfigFile(path string) (Config, error) {
+func ReadConfigFile(path string) (Config, error) {
 	var config = Config{}
 
 	_, err := toml.DecodeFile(path, &config)

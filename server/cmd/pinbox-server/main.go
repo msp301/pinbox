@@ -12,7 +12,6 @@ import (
 	"sort"
 	"time"
 
-	"github.com/BurntSushi/toml"
 	"github.com/gorilla/mux"
 	"github.com/jhillyerd/enmime"
 	notmuch "github.com/msp301/go.notmuch"
@@ -197,8 +196,8 @@ func main() {
 	args := os.Args[1:]
 	configPath := args[0]
 
-	var config pinbox.Config
-	if _, err := toml.DecodeFile(configPath, &config); err != nil {
+	config, err := pinbox.ReadConfigFile(configPath)
+	if err != nil {
 		log.Fatal(err)
 	}
 
