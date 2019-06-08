@@ -1,5 +1,7 @@
 BINARY=pinbox-server
 
+.PHONY: build clean test
+
 $(BINARY): test build
 
 build:
