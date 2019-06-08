@@ -1,6 +1,8 @@
 BINARY=pinbox-server
 
-$(BINARY): test
+$(BINARY): test build
+
+build:
 	go build -o $(BINARY) cmd/pinbox-server/main.go
 
 clean:
