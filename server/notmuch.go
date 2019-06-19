@@ -9,14 +9,14 @@ import (
 )
 
 type Notmuch struct {
-	dbPath        string
+	DbPath        string
 	ExcludeLabels []string
 }
 
 //func Inbox() []interface{} {}
 
 func (mailbox *Notmuch) Labels() ([]Label, error) {
-	db, err := openDatabase(mailbox.dbPath)
+	db, err := openDatabase(mailbox.DbPath)
 	if err != nil {
 		return nil, err
 	}

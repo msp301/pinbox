@@ -37,27 +37,12 @@ func openIndexDatabase(path string) *notmuch.DB {
 	return db
 }
 
-func getLabels(writer http.ResponseWriter, req *http.Request, db *notmuch.DB, config pinbox.Config) {
-	tags, err := db.Tags()
-	if err != nil {
-		log.Println("Error getting tags")
-	}
+func getLabels(writer http.ResponseWriter, req *http.Request, config pinbox.Config) {
 
-	hidden := make(map[string]int, 0)
-	for _, label := range config.Hidden {
-		hidden[label] = 1
-	}
+	mailbox := pinbox.Notmuch{DbPath: config.Maildir}
+	mailbox.ExcludeLabels = config.Hidden
+	payload, _ := mailbox.Labels()
 
-	var payload []pinbox.Label
-	tag := notmuch.Tag{}
-	for tags.Next(&tag) {
-		name := tag.Value
-		if hidden[name] == 1 {
-			continue
-		}
-		label := pinbox.Label{ID: name, Name: name}
-		payload = append(payload, label)
-	}
 	content, err := json.Marshal(payload)
 
 	if err != nil {
@@ -207,6 +192,7 @@ func main() {
 	}
 
 	db := openIndexDatabase(dir)
+	db.Close()
 	router := mux.NewRouter()
 
 	router.UseEncodedPath()
@@ -328,7 +314,7 @@ func main() {
 	})
 
 	router.HandleFunc("/api/labels", func(writer http.ResponseWriter, req *http.Request) {
-		getLabels(writer, req, db, config)
+		getLabels(writer, req, config)
 	})
 
 	router.Path("/api/messages").Queries("label", "{label}").HandlerFunc(func(writer http.ResponseWriter, req *http.Request) {
