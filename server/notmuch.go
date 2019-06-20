@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"sort"
 	"time"
 
@@ -245,6 +246,10 @@ func openDatabase(path string) (*notmuch.DB, error) {
 	var status error
 	var dbPath = path + "/.notmuch"
 
+	_, err := filepath.Abs(path)
+	if err != nil {
+		return nil, err
+	}
 	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
 		db, status = notmuch.Create(path)
 		db.Close()

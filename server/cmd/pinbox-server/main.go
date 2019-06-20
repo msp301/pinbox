@@ -7,31 +7,11 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"path/filepath"
 
 	"github.com/gorilla/mux"
-	notmuch "github.com/msp301/go.notmuch"
 
 	"github.com/msp301/pinbox-server"
 )
-
-func openIndexDatabase(path string) *notmuch.DB {
-	var db *notmuch.DB
-	var status error
-	var dbPath = path + "/.notmuch"
-
-	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
-		db, status = notmuch.Create(path)
-		db.Close()
-	}
-	if status == nil {
-		db, status = notmuch.Open(path, notmuch.DBReadWrite)
-	} else {
-		log.Fatal("Failed to open database")
-	}
-
-	return db
-}
 
 func getLabels(writer http.ResponseWriter, req *http.Request, mailbox pinbox.Mailbox) {
 
@@ -111,19 +91,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	dir, err := filepath.Abs(config.Maildir)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	mailbox := pinbox.CreateNotmuch()
 	mailbox.DbPath = config.Maildir
 	mailbox.ExcludeLabels = config.Hidden
 	mailbox.Bundle = config.Bundle
 	mailbox.InboxLabel = config.Inbox
 
-	db := openIndexDatabase(dir)
-	db.Close()
 	router := mux.NewRouter()
 
 	router.UseEncodedPath()
