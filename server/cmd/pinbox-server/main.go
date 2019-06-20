@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -11,7 +10,6 @@ import (
 	"path/filepath"
 
 	"github.com/gorilla/mux"
-	"github.com/jhillyerd/enmime"
 	notmuch "github.com/msp301/go.notmuch"
 
 	"github.com/msp301/pinbox-server"
@@ -54,52 +52,20 @@ func getLabels(writer http.ResponseWriter, req *http.Request, mailbox pinbox.Mai
 	handler(content, writer)
 }
 
-func getMessage(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
+func getMessage(writer http.ResponseWriter, req *http.Request, mailbox pinbox.Mailbox) {
 	vars := mux.Vars(req)
 	rawID, err := url.PathUnescape(vars["id"])
 
-	var msg *notmuch.Message
-	var msgFilename string
-	if err == nil {
-		msg, err = db.FindMessage(rawID)
-
-		if err == nil {
-			msgFilename = msg.Filename()
-		}
-	}
-
 	if err != nil {
-		log.Println(fmt.Sprintf("%s: %s", rawID, err))
+		log.Println("Failed to extract message ID from URL", err)
 		return
 	}
 
-	file, err := os.Open(msgFilename)
+	payload, err := mailbox.ReadMessage(rawID)
 
 	if err != nil {
-		log.Println(err)
+		log.Println("Failed to read message", err)
 		return
-	}
-	defer file.Close()
-
-	env, err := enmime.ReadEnvelope(file)
-
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	body := env.HTML
-	if len(body) == 0 {
-		body = env.Text
-	}
-
-	encodedContent := base64.StdEncoding.EncodeToString([]byte(body))
-
-	payload := pinbox.MessageContent{
-		ID:      msg.ID(),
-		Epoch:   msg.Date().Unix(),
-		Author:  msg.Header("From"),
-		Content: encodedContent,
 	}
 
 	content, err := json.Marshal(payload)
@@ -110,7 +76,6 @@ func getMessage(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 	}
 
 	handler(content, writer)
-	msg.Close()
 }
 
 func getMessages(writer http.ResponseWriter, req *http.Request, mailbox pinbox.Mailbox, query string) {
@@ -220,7 +185,7 @@ func main() {
 	})
 
 	router.HandleFunc("/api/messages/{id}", func(writer http.ResponseWriter, req *http.Request) {
-		getMessage(writer, req, db)
+		getMessage(writer, req, mailbox)
 	})
 
 	port := fmt.Sprintf(":%d", config.Port)

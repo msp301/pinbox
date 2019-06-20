@@ -1,6 +1,7 @@
 package pinbox
 
 import (
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"log"
@@ -8,6 +9,7 @@ import (
 	"sort"
 	"time"
 
+	"github.com/jhillyerd/enmime"
 	notmuch "github.com/msp301/go.notmuch"
 )
 
@@ -163,7 +165,63 @@ func (mailbox *Notmuch) Labels() ([]Label, error) {
 	return payload, nil
 }
 
-func (mailbox *Notmuch) ReadMessage(id string) Message { return Message{} }
+func (mailbox *Notmuch) ReadMessage(id string) (MessageContent, error) {
+
+	db, err := openDatabase(mailbox.DbPath)
+	if err != nil {
+		return MessageContent{}, err
+	}
+
+	defer db.Close()
+
+	var msg *notmuch.Message
+	var msgFilename string
+	if err == nil {
+		msg, err = db.FindMessage(id)
+
+		if err == nil {
+			msgFilename = msg.Filename()
+		}
+	}
+
+	if err != nil {
+		log.Println(fmt.Sprintf("%s: %s", id, err))
+		return MessageContent{}, err
+	}
+
+	file, err := os.Open(msgFilename)
+
+	if err != nil {
+		log.Println(err)
+		return MessageContent{}, err
+	}
+	defer file.Close()
+
+	env, err := enmime.ReadEnvelope(file)
+
+	if err != nil {
+		log.Println(err)
+		return MessageContent{}, err
+	}
+
+	body := env.HTML
+	if len(body) == 0 {
+		body = env.Text
+	}
+
+	encodedContent := base64.StdEncoding.EncodeToString([]byte(body))
+
+	payload := MessageContent{
+		ID:      msg.ID(),
+		Epoch:   msg.Date().Unix(),
+		Author:  msg.Header("From"),
+		Content: encodedContent,
+	}
+
+	msg.Close()
+
+	return payload, nil
+}
 
 func (mailbox *Notmuch) Search(query string) ([]Thread, error) {
 
