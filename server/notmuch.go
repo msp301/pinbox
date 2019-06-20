@@ -13,13 +13,20 @@ type Notmuch struct {
 	ExcludeLabels []string
 }
 
-//func Inbox() []interface{} {}
+func CreateNotmuch() *Notmuch {
+	mailbox := Notmuch{}
+	return &mailbox
+}
+
+func (mailbox *Notmuch) Inbox() []interface{} { return nil }
 
 func (mailbox *Notmuch) Labels() ([]Label, error) {
 	db, err := openDatabase(mailbox.DbPath)
 	if err != nil {
 		return nil, err
 	}
+
+	defer db.Close()
 
 	tags, err := db.Tags()
 	if err != nil {
@@ -45,9 +52,9 @@ func (mailbox *Notmuch) Labels() ([]Label, error) {
 	return payload, nil
 }
 
-//func ReadMessage(id string) Message {}
+func (mailbox *Notmuch) ReadMessage(id string) Message { return Message{} }
 
-//func Search(query string) []Thread {}
+func (mailbox *Notmuch) Search(query string) []Thread { return nil }
 
 func openDatabase(path string) (*notmuch.DB, error) {
 	var db *notmuch.DB
