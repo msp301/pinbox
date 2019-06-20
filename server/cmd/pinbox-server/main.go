@@ -9,8 +9,6 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
-	"sort"
-	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/jhillyerd/enmime"
@@ -197,6 +195,8 @@ func main() {
 	mailbox := pinbox.CreateNotmuch()
 	mailbox.DbPath = config.Maildir
 	mailbox.ExcludeLabels = config.Hidden
+	mailbox.Bundle = config.Bundle
+	mailbox.InboxLabel = config.Inbox
 
 	db := openIndexDatabase(dir)
 	db.Close()
@@ -205,105 +205,8 @@ func main() {
 	router.UseEncodedPath()
 
 	router.HandleFunc("/api/inbox", func(writer http.ResponseWriter, req *http.Request) {
-		inboxLabel := config.Inbox
 
-		// Labels to bundle in the inbox
-		labels := config.Bundle
-
-		queryString := "tag:" + inboxLabel
-		for _, label := range labels {
-			queryString += " and not tag:" + label
-		}
-
-		query := db.NewQuery(queryString)
-		threads, err := query.Threads()
-
-		bundles := make(map[string][]*pinbox.Bundle)
-		for _, label := range labels {
-			bundle := db.NewQuery("tag:" + inboxLabel + " and tag:" + label)
-			res, err := bundle.Threads()
-
-			if err != nil {
-				log.Println(fmt.Sprintf("Error with bundle '%s': %s", label, err))
-				continue
-			}
-
-			bundled := make([]*pinbox.Thread, 0)
-			var latestDate time.Time
-			thread := notmuch.Thread{}
-			for res.Next(&thread) {
-				date := thread.NewestDate()
-
-				if date.Unix() > latestDate.Unix() {
-					latestDate = date
-				}
-
-				thr := toOurThread(&thread)
-				bundled = append(bundled, &thr)
-			}
-
-			if len(bundled) > 0 {
-				month := fmt.Sprintf("%d %d", latestDate.Month(), latestDate.Year())
-				bundles[month] = append(
-					bundles[month],
-					&pinbox.Bundle{
-						ID:      label,
-						Type:    "bundle",
-						Date:    latestDate.Unix(),
-						Threads: bundled,
-					})
-			}
-		}
-
-		for key := range bundles {
-			sort.Slice(bundles[key], func(i, j int) bool {
-				return bundles[key][i].Date > bundles[key][j].Date
-			})
-		}
-
-		inbox := make([]interface{}, 0)
-		thread := notmuch.Thread{}
-		var prevDate time.Time
-		for true {
-			if !threads.Next(&thread) {
-				// We have already added all top-level threads.
-				// There may still be bundles that have not been included.
-				// Flush out any remaining bundles that are older than our last top-level thread.
-				keys := make([]string, 0)
-				for key := range bundles {
-					keys = append(keys, key)
-				}
-				sort.Sort(sort.Reverse(sort.StringSlice(keys)))
-
-				for _, key := range keys {
-					for _, bundle := range bundles[key] {
-						if bundle.Date < prevDate.Unix() {
-							inbox = append(inbox, bundle)
-						}
-					}
-				}
-
-				break
-			}
-
-			date := thread.NewestDate()
-			month := fmt.Sprintf("%d %d", date.Month(), date.Year())
-
-			if len(bundles[month]) > 0 {
-				for _, bundle := range bundles[month] {
-					bundleDate := bundle.Date
-
-					if bundleDate > date.Unix() {
-						inbox = append(inbox, bundle)
-					}
-				}
-			}
-
-			thr := toOurThread(&thread)
-			thr.Type = "thread"
-			inbox = append(inbox, &thr)
-			prevDate = date
-		}
+		inbox, err := mailbox.Inbox()
 
 		if err != nil {
 			log.Println(err)
@@ -317,7 +220,6 @@ func main() {
 		}
 
 		handler(content, writer)
-		threads.Close()
 	})
 
 	router.HandleFunc("/api/labels", func(writer http.ResponseWriter, req *http.Request) {
