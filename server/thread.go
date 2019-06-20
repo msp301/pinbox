@@ -49,3 +49,14 @@ func toOurThread(thr *notmuch.Thread) Thread {
 
 	return res
 }
+
+func toOurThreads(threads *notmuch.Threads) []Thread {
+	var payload []Thread
+	thr := notmuch.Thread{}
+	for threads.Next(&thr) {
+		res := toOurThread(&thr)
+		payload = append(payload, res)
+	}
+
+	return payload
+}

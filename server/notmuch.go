@@ -165,7 +165,22 @@ func (mailbox *Notmuch) Labels() ([]Label, error) {
 
 func (mailbox *Notmuch) ReadMessage(id string) Message { return Message{} }
 
-func (mailbox *Notmuch) Search(query string) []Thread { return nil }
+func (mailbox *Notmuch) Search(query string) ([]Thread, error) {
+
+	db, err := openDatabase(mailbox.DbPath)
+	if err != nil {
+		return nil, err
+	}
+
+	defer db.Close()
+
+	dbQuery := db.NewQuery(query)
+	threads, err := dbQuery.Threads()
+
+	payload := toOurThreads(threads)
+
+	return payload, nil
+}
 
 func openDatabase(path string) (*notmuch.DB, error) {
 	var db *notmuch.DB

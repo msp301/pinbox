@@ -113,55 +113,14 @@ func getMessage(writer http.ResponseWriter, req *http.Request, db *notmuch.DB) {
 	msg.Close()
 }
 
-func toOurThread(thr *notmuch.Thread) pinbox.Thread {
-	_, authors := thr.Authors()
+func getMessages(writer http.ResponseWriter, req *http.Request, mailbox pinbox.Mailbox, query string) {
+	payload, err := mailbox.Search(query)
 
-	var messages []pinbox.Message
-	msg := notmuch.Message{}
-	msgs := thr.Messages()
-	for msgs.Next(&msg) {
-		var files []string
-		file := ""
-		filenames := msg.Filenames()
-		for filenames.Next(&file) {
-			files = append(files, file)
-		}
-
-		message := pinbox.Message{
-			ID:    msg.ID(),
-			Epoch: msg.Date().Unix(),
-			Files: files,
-		}
-
-		messages = append(messages, message)
-	}
-	msgs.Close()
-
-	res := pinbox.Thread{
-		ID:         thr.ID(),
-		Subject:    thr.Subject(),
-		NewestDate: thr.NewestDate().Unix(),
-		OldestDate: thr.OldestDate().Unix(),
-		Authors:    authors,
-		Messages:   messages,
+	if err != nil {
+		log.Println("Failed to get messages", err)
+		return
 	}
 
-	return res
-}
-
-func toOurThreads(threads *notmuch.Threads) []pinbox.Thread {
-	var payload []pinbox.Thread
-	thr := notmuch.Thread{}
-	for threads.Next(&thr) {
-		res := toOurThread(&thr)
-		payload = append(payload, res)
-	}
-
-	return payload
-}
-
-func getMessages(writer http.ResponseWriter, req *http.Request, db *notmuch.DB, threads *notmuch.Threads) {
-	payload := toOurThreads(threads)
 	content, err := json.Marshal(payload)
 
 	if err != nil {
@@ -248,29 +207,16 @@ func main() {
 			return
 		}
 
-		query := db.NewQuery(dbQuery)
-		threads, err := query.Threads()
-
 		if err != nil {
 			log.Println(err)
 			return
 		}
 
-		getMessages(writer, req, db, threads)
-		threads.Close()
+		getMessages(writer, req, mailbox, dbQuery)
 	})
 
 	router.HandleFunc("/api/messages", func(writer http.ResponseWriter, req *http.Request) {
-		query := db.NewQuery("*")
-		threads, err := query.Threads()
-
-		if err != nil {
-			log.Println(err)
-			return
-		}
-
-		getMessages(writer, req, db, threads)
-		threads.Close()
+		getMessages(writer, req, mailbox, "*")
 	})
 
 	router.HandleFunc("/api/messages/{id}", func(writer http.ResponseWriter, req *http.Request) {
