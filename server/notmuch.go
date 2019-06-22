@@ -14,6 +14,8 @@ import (
 	notmuch "github.com/msp301/go.notmuch"
 )
 
+// Notmuch is a Mailbox object intended to interact with a Notmuch database.
+// See https://notmuchmail.org/ for more information.
 type Notmuch struct {
 	DbPath        string
 	ExcludeLabels []string
@@ -21,6 +23,8 @@ type Notmuch struct {
 	Bundle        []string
 }
 
+// CreateNotmuch creates a new Notmuch object ready to interact with the
+// database specified by the given configuration.
 func CreateNotmuch(config Config) *Notmuch {
 	mailbox := Notmuch{
 		DbPath:        config.Maildir,
