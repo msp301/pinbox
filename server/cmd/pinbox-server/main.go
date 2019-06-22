@@ -20,11 +20,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	mailbox := pinbox.CreateNotmuch()
-	mailbox.DbPath = config.Maildir
-	mailbox.ExcludeLabels = config.Hidden
-	mailbox.Bundle = config.Bundle
-	mailbox.InboxLabel = config.Inbox
+	mailbox := pinbox.CreateNotmuch(config)
 
 	api := pinbox.CreateMailboxAPI(mailbox)
 

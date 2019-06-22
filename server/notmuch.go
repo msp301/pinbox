@@ -21,8 +21,13 @@ type Notmuch struct {
 	Bundle        []string
 }
 
-func CreateNotmuch() *Notmuch {
-	mailbox := Notmuch{}
+func CreateNotmuch(config Config) *Notmuch {
+	mailbox := Notmuch{
+		DbPath:        config.Maildir,
+		ExcludeLabels: config.Hidden,
+		InboxLabel:    config.Inbox,
+		Bundle:        config.Bundle,
+	}
 	return &mailbox
 }
 
