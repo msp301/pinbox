@@ -9,17 +9,20 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// MailboxAPI Contains logic for handling mailbox http requests
+// MailboxAPI contains logic for handling mailbox http requests
 type MailboxAPI struct {
 	mailbox Mailbox
 }
 
+// CreateMailboxAPI creates a new Mailbox API instance.
+// Return a new MailboxAPI reference.
 func CreateMailboxAPI(mailbox Mailbox) *MailboxAPI {
 	return &MailboxAPI{
 		mailbox: mailbox,
 	}
 }
 
+// GetInbox retrieves all inbox messages in the Mailbox.
 func (m *MailboxAPI) GetInbox(writer http.ResponseWriter, req *http.Request) {
 
 	inbox, err := m.mailbox.Inbox()
@@ -38,6 +41,7 @@ func (m *MailboxAPI) GetInbox(writer http.ResponseWriter, req *http.Request) {
 	handler(content, writer)
 }
 
+// GetLabels retrieves the available labels in the Mailbox.
 func (m *MailboxAPI) GetLabels(writer http.ResponseWriter, req *http.Request) {
 
 	payload, err := m.mailbox.Labels()
@@ -56,6 +60,7 @@ func (m *MailboxAPI) GetLabels(writer http.ResponseWriter, req *http.Request) {
 	handler(content, writer)
 }
 
+// HandleSingleMessage retrieves a message by ID from the Mailbox.
 func (m *MailboxAPI) HandleSingleMessage(writer http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	rawID, err := url.PathUnescape(vars["id"])
@@ -82,6 +87,7 @@ func (m *MailboxAPI) HandleSingleMessage(writer http.ResponseWriter, req *http.R
 	handler(content, writer)
 }
 
+// HandleAllMessages retrieves all messages in the Mailbox.
 func (m *MailboxAPI) HandleAllMessages(writer http.ResponseWriter, req *http.Request) {
 	payload, err := m.mailbox.Search("*")
 	if err != nil {
@@ -100,6 +106,7 @@ func (m *MailboxAPI) HandleAllMessages(writer http.ResponseWriter, req *http.Req
 	handler(content, writer)
 }
 
+// HandleLabeledMessages retrieves any messages in the Mailbox with the specified labels.
 func (m *MailboxAPI) HandleLabeledMessages(writer http.ResponseWriter, req *http.Request) {
 	labels := req.URL.Query()["label"]
 

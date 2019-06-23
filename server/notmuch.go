@@ -35,6 +35,11 @@ func CreateNotmuch(config Config) *Notmuch {
 	return &mailbox
 }
 
+// Inbox returns all email messages that match the configured 'InboxLabel' whilst
+// grouping together any messages that match the labels specified in the 'Bundle' list.
+//
+// Returns a mixed list of Thread and Bundle objects.
+// The list is returned in reverse chronological order.
 func (mailbox *Notmuch) Inbox() ([]interface{}, error) {
 	db, err := openDatabase(mailbox.DbPath)
 	if err != nil {
@@ -143,6 +148,9 @@ func (mailbox *Notmuch) Inbox() ([]interface{}, error) {
 	return inbox, nil
 }
 
+// Labels returns a list of Label objects corresponding to 'tags' configured in
+// the Notmuch database.
+// Any label IDs specified in Notmuch.ExcludeLabels will be omitted.
 func (mailbox *Notmuch) Labels() ([]Label, error) {
 	db, err := openDatabase(mailbox.DbPath)
 	if err != nil {
@@ -175,6 +183,8 @@ func (mailbox *Notmuch) Labels() ([]Label, error) {
 	return payload, nil
 }
 
+// ReadMessage retrieves the content of an email.
+// Returns a MessageContent object containing email body encoded in base64.
 func (mailbox *Notmuch) ReadMessage(id string) (MessageContent, error) {
 
 	db, err := openDatabase(mailbox.DbPath)
@@ -233,6 +243,8 @@ func (mailbox *Notmuch) ReadMessage(id string) (MessageContent, error) {
 	return payload, nil
 }
 
+// Search retrieves emails from the Notmuch database based on a given query.
+// The query string must be provided in Xapian query format (https://notmuchmail.org/searching/).
 func (mailbox *Notmuch) Search(query string) ([]Thread, error) {
 
 	db, err := openDatabase(mailbox.DbPath)
