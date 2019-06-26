@@ -22,7 +22,7 @@ func main() {
 
 	mailbox := pinbox.CreateNotmuch(config)
 
-	api := pinbox.CreateMailboxAPI(mailbox)
+	api := pinbox.CreateMailboxAPI(mailbox, config)
 
 	router := mux.NewRouter()
 	router.UseEncodedPath()

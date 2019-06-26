@@ -12,20 +12,22 @@ import (
 // MailboxAPI contains logic for handling mailbox http requests
 type MailboxAPI struct {
 	mailbox Mailbox
+	config  Config
 }
 
 // CreateMailboxAPI creates a new Mailbox API instance.
 // Return a new MailboxAPI reference.
-func CreateMailboxAPI(mailbox Mailbox) *MailboxAPI {
+func CreateMailboxAPI(mailbox Mailbox, config Config) *MailboxAPI {
 	return &MailboxAPI{
 		mailbox: mailbox,
+		config:  config,
 	}
 }
 
 // GetInbox retrieves all inbox messages in the Mailbox.
 func (m *MailboxAPI) GetInbox(writer http.ResponseWriter, req *http.Request) {
 
-	inbox, err := m.mailbox.Inbox()
+	inbox, err := Inbox(m.mailbox, m.config)
 	if err != nil {
 		log.Println(err)
 		return
