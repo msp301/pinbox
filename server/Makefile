@@ -2,7 +2,7 @@ BINARY=pinbox-server
 
 .PHONY: build clean test
 
-$(BINARY): test build
+$(BINARY): build test
 
 build:
 	go get -d ./...
