@@ -1,6 +1,7 @@
 package pinbox
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"sort"
@@ -30,8 +31,7 @@ func Inbox(mailbox Mailbox, config Config) ([]interface{}, error) {
 
 	threads, err := mailbox.Search(queryString)
 	if err != nil {
-		println("Searched failed: ", err)
-		return nil, err
+		return nil, errors.New("Search failed: " + err.Error())
 	}
 
 	bundles := make(map[string][]*Bundle)

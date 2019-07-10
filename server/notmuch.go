@@ -156,6 +156,10 @@ func openDatabase(path string) (*notmuch.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		msg := fmt.Sprintf("Mailbox directory '%s' does not exist", path)
+		return nil, errors.New(msg)
+	}
 	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
 		db, status = notmuch.Create(path)
 		db.Close()
