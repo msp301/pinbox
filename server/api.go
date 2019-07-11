@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/gorilla/mux"
 )
@@ -33,14 +34,7 @@ func (m *MailboxAPI) GetInbox(writer http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	content, err := json.Marshal(inbox)
-	if err != nil {
-		log.Println("Failed to convert to JSON", err)
-		http.Error(writer, "Failed to convert to JSON", http.StatusInternalServerError)
-		return
-	}
-
-	handler(content, writer)
+	handler(inbox, writer)
 }
 
 // GetLabels retrieves the available labels in the Mailbox.
@@ -52,14 +46,7 @@ func (m *MailboxAPI) GetLabels(writer http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	content, err := json.Marshal(payload)
-	if err != nil {
-		log.Println("Failed to convert to JSON", err)
-		http.Error(writer, "Failed to convert to JSON", http.StatusInternalServerError)
-		return
-	}
-
-	handler(content, writer)
+	handler(payload, writer)
 }
 
 // HandleSingleMessage retrieves a message by ID from the Mailbox.
@@ -80,13 +67,7 @@ func (m *MailboxAPI) HandleSingleMessage(writer http.ResponseWriter, req *http.R
 		return
 	}
 
-	content, err := json.Marshal(payload)
-	if err != nil {
-		log.Println("Failed to convert to JSON", err)
-		return
-	}
-
-	handler(content, writer)
+	handler(payload, writer)
 }
 
 // HandleAllMessages retrieves all messages in the Mailbox.
@@ -98,14 +79,7 @@ func (m *MailboxAPI) HandleAllMessages(writer http.ResponseWriter, req *http.Req
 		return
 	}
 
-	content, err := json.Marshal(payload)
-	if err != nil {
-		log.Println("Failed to convert to JSON", err)
-		http.Error(writer, "Failed to convert to JSON", http.StatusInternalServerError)
-		return
-	}
-
-	handler(content, writer)
+	handler(payload, writer)
 }
 
 // HandleLabeledMessages retrieves any messages in the Mailbox with the specified labels.
@@ -138,17 +112,23 @@ func (m *MailboxAPI) HandleLabeledMessages(writer http.ResponseWriter, req *http
 		return
 	}
 
-	content, err := json.Marshal(payload)
+	handler(payload, writer)
+}
+
+func handler(content interface{}, writer http.ResponseWriter) {
+	// Generally we're expecting a series of results.
+	// To stop json.Marshal outputting 'null', assume the intent is to return a list.
+	if reflect.ValueOf(content).IsNil() {
+		content = make([]interface{}, 0)
+	}
+
+	body, err := json.Marshal(content)
 	if err != nil {
 		log.Println("Failed to convert to JSON", err)
 		http.Error(writer, "Failed to convert to JSON", http.StatusInternalServerError)
 		return
 	}
 
-	handler(content, writer)
-}
-
-func handler(body []byte, writer http.ResponseWriter) {
 	writer.Header().Set("Content-Type", "application/json")
 	writer.Write(body)
 	return
