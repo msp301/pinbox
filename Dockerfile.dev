@@ -1,0 +1,9 @@
+FROM node:10.16.0-jessie-slim
+
+RUN npm install -g @angular/cli
+RUN mkdir -p /pinbox
+
+WORKDIR /pinbox
+
+COPY package.json /pinbox/package.json
+RUN npm install
