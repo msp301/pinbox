@@ -15,7 +15,7 @@ Pinbox server requires a [TOML](https://github.com/toml-lang/toml) configuration
 
 ## Starting the server
 
-`go build && ./pinbox-server config.toml`
+make && ./pinbox-server config.toml`
 
 ## Architecture
 
