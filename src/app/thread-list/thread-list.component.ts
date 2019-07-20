@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, ViewEncapsulation } from '@angular/core';
 import { Thread } from '../core/thread.model';
 import { Bundle } from '../core/bundle.model';
+import { Message } from '../core/message.model';
 
 interface IBundleListItem {
   id: string;
@@ -13,7 +14,7 @@ interface IThreadListItem {
   month: string;
   authors: string[];
   subject: string;
-  messages?: string[];
+  messages?: Message[];
 }
 
 @Component({
@@ -43,7 +44,7 @@ export class ThreadListComponent implements OnChanges {
             month: this.dateToName( thread.newestDate ),
             authors: thread.authors,
             subject: thread.subject,
-            messages: thread.messages.map( msg => msg.id ),
+            messages: thread.messages,
           };
         } else {
           return {

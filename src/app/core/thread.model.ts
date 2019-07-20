@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Adapter } from './adapter';
+import { Message } from './message.model';
 
 export class Thread {
   constructor(
@@ -8,7 +9,7 @@ export class Thread {
     public newestDate: Date,
     public oldestDate: Date,
     public authors: string[],
-    public messages: { id: string }[],
+    public messages: Message[],
   ) {}
 }
 

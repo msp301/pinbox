@@ -10,11 +10,11 @@ import { Label } from '../core/label.model';
 })
 export class MessageComponent {
   @Input() id: string;
+  @Input() author: string;
   @Input() title: string;
   @Input() description: string;
 
   subject: string;
-  author: string;
   content: string;
   date: Date;
 
@@ -30,7 +30,6 @@ export class MessageComponent {
     if ( ! this.content ) {
       this.service.getMessage( this.id ).subscribe(
         ( message: Message ) => {
-          this.author = message.author;
           this.date = message.date;
           this.content = atob( message.content );
         }

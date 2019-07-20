@@ -22,6 +22,6 @@
   </div>
 
   <mat-accordion>
-    <app-message *ngFor="let msgId of messages; let idx = index" [id]="msgId" [title]="authors[idx]"></app-message>
+    <app-message *ngFor="let msg of messages" [id]="msg.id" [title]="msg.author"></app-message>
   </mat-accordion>
 </mat-expansion-panel>
