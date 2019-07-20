@@ -34,7 +34,7 @@ func (m *MailboxAPI) GetInbox(writer http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	handler(inbox, writer)
+	listHandler(inbox, writer)
 }
 
 // GetLabels retrieves the available labels in the Mailbox.
@@ -46,7 +46,7 @@ func (m *MailboxAPI) GetLabels(writer http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	handler(payload, writer)
+	listHandler(payload, writer)
 }
 
 // HandleSingleMessage retrieves a message by ID from the Mailbox.
@@ -79,7 +79,7 @@ func (m *MailboxAPI) HandleAllMessages(writer http.ResponseWriter, req *http.Req
 		return
 	}
 
-	handler(payload, writer)
+	listHandler(payload, writer)
 }
 
 // HandleLabeledMessages retrieves any messages in the Mailbox with the specified labels.
@@ -112,16 +112,10 @@ func (m *MailboxAPI) HandleLabeledMessages(writer http.ResponseWriter, req *http
 		return
 	}
 
-	handler(payload, writer)
+	listHandler(payload, writer)
 }
 
 func handler(content interface{}, writer http.ResponseWriter) {
-	// Generally we're expecting a series of results.
-	// To stop json.Marshal outputting 'null', assume the intent is to return a list.
-	if reflect.ValueOf(content).IsNil() {
-		content = make([]interface{}, 0)
-	}
-
 	body, err := json.Marshal(content)
 	if err != nil {
 		log.Println("Failed to convert to JSON", err)
@@ -131,5 +125,16 @@ func handler(content interface{}, writer http.ResponseWriter) {
 
 	writer.Header().Set("Content-Type", "application/json")
 	writer.Write(body)
+	return
+}
+
+func listHandler(content interface{}, writer http.ResponseWriter) {
+	// Generally we're expecting a series of results.
+	// To stop json.Marshal outputting 'null', assume the intent is to return a list.
+	if reflect.ValueOf(content).IsNil() {
+		content = make([]interface{}, 0)
+	}
+
+	handler(content, writer)
 	return
 }
