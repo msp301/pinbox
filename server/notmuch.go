@@ -188,9 +188,10 @@ func toOurThread(thr *notmuch.Thread) Thread {
 		}
 
 		message := Message{
-			ID:    msg.ID(),
-			Epoch: msg.Date().Unix(),
-			Files: files,
+			ID:     msg.ID(),
+			Author: msg.Header("From"),
+			Epoch:  msg.Date().Unix(),
+			Files:  files,
 		}
 
 		messages = append(messages, message)
