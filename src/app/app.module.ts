@@ -18,6 +18,7 @@ import {
   MatCardModule,
   MatMenuModule
 } from '@angular/material';
+import { QuillModule } from 'ngx-quill';
 import { MailboxService } from './mailbox.service';
 import { MessageComponent } from './message/message.component';
 import { ThreadListComponent } from './thread-list/thread-list.component';
@@ -61,6 +62,7 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
+    QuillModule.forRoot()
   ],
   providers: [
     MailboxService

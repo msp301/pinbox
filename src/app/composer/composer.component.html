@@ -6,6 +6,22 @@ To: <input><br>
 Subject: <input>
 </form>
 
+<quill-editor>
+    <div quill-editor-toolbar>
+      <span class="ql-formats">
+        <button class="ql-bold" [title]="'Bold'"></button>
+      </span>
+      <span class="ql-formats">
+        <select class="ql-align" [title]="'Aligment'">
+          <option selected></option>
+          <option value="center"></option>
+          <option value="right"></option>
+          <option value="justify"></option>
+        </select>
+      </span>
+    </div>
+</quill-editor>
+
 <button class="send" mat-fab color="accent">
     <mat-icon>send</mat-icon>
 </button>
