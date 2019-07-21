@@ -9,9 +9,11 @@ $toolbar-height: 64px;
 }
 
 button.compose {
-    position: fixed;
-    bottom: 25px;
-    right: 40px;
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 0px;
+    left: 100%;
+    margin-top: 80px;
 }
 
 mat-toolbar {
@@ -47,7 +49,6 @@ mat-sidenav {
     }
 }
 
-
 mat-sidenav-content {
     height: 100%;
     padding: 20px 30px 20px 30px;
@@ -60,6 +61,6 @@ mat-sidenav-content {
     }
 }
 
-.content {
-    margin-bottom: 80px;
+.rightnav {
+    width: 40%;
 }

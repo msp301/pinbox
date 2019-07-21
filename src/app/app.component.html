@@ -50,13 +50,17 @@
     </mat-nav-list>
   </mat-sidenav>
 
+  <mat-sidenav #rightnav class="rightnav" mode="side" position="end">
+      <router-outlet name="right"></router-outlet>
+  </mat-sidenav>
+
   <mat-sidenav-content>
     <div class="content">
 
       <router-outlet></router-outlet>
 
-      <button class="compose" mat-fab color="accent">
-        <mat-icon>add</mat-icon>
+      <button [routerLink]="[{ outlets: { right: ['compose'] } }]" (click)="rightnav.toggle()" class="compose" mat-fab color="accent">
+          <mat-icon>add</mat-icon>
       </button>
     </div>
   </mat-sidenav-content>

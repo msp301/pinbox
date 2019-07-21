@@ -24,9 +24,11 @@ import { ThreadListComponent } from './thread-list/thread-list.component';
 import { InboxComponent } from './inbox/inbox.component';
 import { LabelResultsComponent } from './label-results/label-results.component';
 import { ThreadComponent } from './thread/thread.component';
+import { ComposerComponent } from './composer/composer.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'inbox', pathMatch: 'full' },
+  { path: 'compose', component: ComposerComponent, outlet: 'right' },
   { path: 'inbox', component: InboxComponent },
   { path: 'messages/:label', component: LabelResultsComponent },
 ];
@@ -38,7 +40,8 @@ const appRoutes: Routes = [
     ThreadListComponent,
     InboxComponent,
     LabelResultsComponent,
-    ThreadComponent
+    ThreadComponent,
+    ComposerComponent
   ],
   imports: [
     RouterModule.forRoot(
