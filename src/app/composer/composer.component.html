@@ -1,9 +1,15 @@
-<p>composer works!</p>
-
 <form>
-From: test@test.com<br>
-To: <input><br>
-Subject: <input>
+  <mat-form-field>
+    <input matInput placeholder="From" value="test@test.com" readonly>
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+    <input matInput placeholder="To">
+  </mat-form-field>
+  <br>
+  <mat-form-field>
+    <input matInput placeholder="Subject">
+  </mat-form-field>
 </form>
 
 <quill-editor>
