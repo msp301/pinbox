@@ -24,6 +24,8 @@ import { ThreadListComponent } from './thread-list/thread-list.component';
 import { InboxComponent } from './inbox/inbox.component';
 import { LabelResultsComponent } from './label-results/label-results.component';
 import { ThreadComponent } from './thread/thread.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'inbox', pathMatch: 'full' },
@@ -58,6 +60,7 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     MailboxService
