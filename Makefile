@@ -3,9 +3,19 @@
 build-dev:
 	docker build --rm -f Dockerfile.dev -t pinbox .
 
+build-prod:
+	docker build --rm -f Dockerfile -t pinbox-prod .
+
+start-prod:
+	docker run -d -p 8080:80 --name pinbox pinbox-prod
+
 start:
 	docker run -d -it --name pinbox-dev -p 4200:4200 -w /pinbox --mount type=bind,source="$(shell pwd)",target=/pinbox pinbox:latest \
 		ng serve --host 0.0.0.0 --proxy-config proxy.conf.json
+
+stop-prod:
+	docker stop pinbox
+	docker rm pinbox
 
 stop:
 	docker stop pinbox-dev
