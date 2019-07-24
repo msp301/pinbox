@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { MailboxService } from '../mailbox.service';
 import { Message } from '../core/message.model';
 import { Label } from '../core/label.model';
+import { faThumbtack } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-message',
@@ -13,6 +14,8 @@ export class MessageComponent {
   @Input() author: string;
   @Input() title: string;
   @Input() description: string;
+
+  faThumbtack = faThumbtack;
 
   subject: string;
   content: string;
