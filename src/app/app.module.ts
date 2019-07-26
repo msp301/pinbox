@@ -24,6 +24,8 @@ import { ThreadListComponent } from './thread-list/thread-list.component';
 import { InboxComponent } from './inbox/inbox.component';
 import { LabelResultsComponent } from './label-results/label-results.component';
 import { ThreadComponent } from './thread/thread.component';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './reducers';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'inbox', pathMatch: 'full' },
@@ -58,6 +60,13 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
+    StoreModule.forRoot(reducers, {
+      metaReducers,
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true
+      }
+    }),
   ],
   providers: [
     MailboxService
