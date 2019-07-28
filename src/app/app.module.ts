@@ -26,6 +26,7 @@ import { LabelResultsComponent } from './label-results/label-results.component';
 import { ThreadComponent } from './thread/thread.component';
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
+import { menuReducer } from './app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 
@@ -62,7 +63,7 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
-    StoreModule.forRoot(reducers, {
+    StoreModule.forRoot({ menuOpen: menuReducer }, {
       metaReducers,
       runtimeChecks: {
         strictStateImmutability: true,

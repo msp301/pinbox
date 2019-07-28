@@ -1,7 +1,10 @@
 import { Component, Input, EventEmitter, OnChanges, Output } from '@angular/core';
+import { Store, select } from '@ngrx/store';
 import { MailboxService } from './mailbox.service';
 import { Message } from './core/message.model';
 import { Label } from './core/label.model';
+import { Observable } from 'rxjs';
+import { menuIconClicked } from './app.actions';
 
 @Component({
   selector: 'app-root',
@@ -18,10 +21,18 @@ export class AppComponent implements OnChanges {
   @Input() messageId: string;
   @Output() messageOpened = new EventEmitter();
 
+  menuOpen$: Observable<boolean>;
+
   constructor(
+    private store: Store<{ menuOpen: boolean }>,
     private mailbox: MailboxService,
   ) {
+    this.menuOpen$ = store.pipe( select( 'menuOpen' ) );
     mailbox.getLabels().subscribe( value => this.labels = value );
+  }
+
+  toggleMenu() {
+    this.store.dispatch( menuIconClicked() );
   }
 
   getMessage() {
