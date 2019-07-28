@@ -26,6 +26,8 @@ import { LabelResultsComponent } from './label-results/label-results.component';
 import { ThreadComponent } from './thread/thread.component';
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'inbox', pathMatch: 'full' },
@@ -67,6 +69,7 @@ const appRoutes: Routes = [
         strictActionImmutability: true
       }
     }),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
   ],
   providers: [
     MailboxService
