@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-  <button mat-icon-button (click)="toggleMenu()" aria-label="menu">
+  <button mat-icon-button (click)="sidenav.toggle()" aria-label="menu">
     <mat-icon>menu</mat-icon>
   </button>
 
@@ -11,7 +11,7 @@
 </mat-toolbar>
 
 <mat-sidenav-container>
-  <mat-sidenav #sidenav mode="side" opened="{{ menuOpen$ | async }}">
+  <mat-sidenav #sidenav mode="side" opened="{{ menuOpen$ | async }}" (opened)="menuOpened()" (closed)="menuClosed()">
     <mat-nav-list>
       <a mat-list-item [routerLink]="['inbox']">
         <mat-icon>inbox</mat-icon> <span>Inbox</span>

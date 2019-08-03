@@ -4,7 +4,7 @@ import { MailboxService } from './mailbox.service';
 import { Message } from './core/message.model';
 import { Label } from './core/label.model';
 import { Observable } from 'rxjs';
-import { menuIconClicked } from './app.actions';
+import { menuOpened, menuClosed } from './app.actions';
 
 @Component({
   selector: 'app-root',
@@ -31,9 +31,8 @@ export class AppComponent implements OnChanges {
     mailbox.getLabels().subscribe( value => this.labels = value );
   }
 
-  toggleMenu() {
-    this.store.dispatch( menuIconClicked() );
-  }
+  menuOpened() { this.store.dispatch( menuOpened() ); }
+  menuClosed() { this.store.dispatch( menuClosed() ); }
 
   getMessage() {
     this.messageOpened.emit( this.messageId );
