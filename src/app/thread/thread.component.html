@@ -11,7 +11,7 @@
     <mat-panel-description>
       <p>{{ description }}</p>
     </mat-panel-description>
-    <button mat-icon-button (click)="$event.stopPropagation()"><i class="fas fa-thumbtack"></i></button>
+    <button mat-icon-button (click)="$event.stopPropagation()"><fa-icon [icon]="faThumbtack"></fa-icon></button>
     <button mat-icon-button [matMenuTriggerFor]="messageActions" (click)="$event.stopPropagation()"><mat-icon>more_vert</mat-icon></button>
   </mat-expansion-panel-header>
 

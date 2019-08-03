@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import {
   MatButtonModule,
@@ -25,6 +26,8 @@ import { ThreadListComponent } from './thread-list/thread-list.component';
 import { InboxComponent } from './inbox/inbox.component';
 import { LabelResultsComponent } from './label-results/label-results.component';
 import { ThreadComponent } from './thread/thread.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 import { ComposerComponent } from './composer/composer.component';
 
 const appRoutes: Routes = [
@@ -51,6 +54,7 @@ const appRoutes: Routes = [
     ),
     BrowserModule,
     BrowserAnimationsModule,
+    FontAwesomeModule,
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
@@ -62,6 +66,7 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     QuillModule.forRoot()
   ],
   providers: [
