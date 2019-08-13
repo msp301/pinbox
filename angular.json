@@ -136,5 +136,8 @@
       }
     }
   },
-  "defaultProject": "pinbox"
+  "defaultProject": "pinbox",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }
