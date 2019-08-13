@@ -40,7 +40,7 @@
       </a>
       <mat-divider></mat-divider>
       <h3 mat-subheader>Labels</h3>
-      <a mat-list-item [routerLink]="['messages', label.name]" *ngFor="let label of labels">
+      <a mat-list-item [routerLink]="['messages', label.name]" *ngFor="let label of labels$ | async">
           <mat-icon>label</mat-icon> <span>{{ label.name }}</span>
       </a>
       <mat-divider></mat-divider>

@@ -30,6 +30,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { AppEffects } from './app.effects';
+import { LabelEffects } from './effects/label.effects';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'inbox', pathMatch: 'full' },
@@ -72,7 +73,7 @@ const appRoutes: Routes = [
       }
     }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    EffectsModule.forRoot([AppEffects]),
+    EffectsModule.forRoot([AppEffects, LabelEffects]),
   ],
   providers: [
     MailboxService
