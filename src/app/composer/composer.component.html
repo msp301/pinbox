@@ -16,14 +16,20 @@
     <div quill-editor-toolbar>
       <span class="ql-formats">
         <button class="ql-bold" [title]="'Bold'"></button>
+        <button class="ql-italic" [title]="'Italic'"></button>
+        <button class="ql-underline" [title]="'Underline'"></button>
+        <button class="ql-strike" [title]="'Strikethough'"></button>
       </span>
+
       <span class="ql-formats">
-        <select class="ql-align" [title]="'Aligment'">
-          <option selected></option>
-          <option value="center"></option>
-          <option value="right"></option>
-          <option value="justify"></option>
-        </select>
+        <button class="ql-align" value="" [title]="'Align left'"></button>
+        <button class="ql-align" value="center" [title]="'Align center'"></button>
+        <button class="ql-align" value="right" [title]="'Align right'"></button>
+      </span>
+
+      <span class="ql-formats">
+        <button class="ql-list" value="bullet" [title]="'Bulleted list'"></button>
+        <button class="ql-list" value="ordered" [title]="'Numbered list'"></button>
       </span>
     </div>
 </quill-editor>
