@@ -31,6 +31,7 @@ func (m *MailboxAPI) GetInbox(writer http.ResponseWriter, req *http.Request) {
 	inbox, err := Inbox(m.mailbox, m.config)
 	if err != nil {
 		log.Println(err)
+		http.Error(writer, "Error occurred accessing inbox", http.StatusInternalServerError)
 		return
 	}
 
@@ -43,6 +44,7 @@ func (m *MailboxAPI) GetLabels(writer http.ResponseWriter, req *http.Request) {
 	payload, err := m.mailbox.Labels()
 	if err != nil {
 		log.Println("Failed to get labels", err)
+		http.Error(writer, "Failed to get labels", http.StatusInternalServerError)
 		return
 	}
 
