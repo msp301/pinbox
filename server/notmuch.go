@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 
@@ -46,7 +45,7 @@ func (mailbox *Notmuch) Labels() ([]Label, error) {
 
 	tags, err := db.Tags()
 	if err != nil {
-		log.Println("Error getting tags")
+		return nil, errors.New("Error getting tags")
 	}
 
 	hidden := make(map[string]int, 0)
@@ -90,14 +89,12 @@ func (mailbox *Notmuch) ReadMessage(id string) (MessageContent, error) {
 	}
 
 	if err != nil {
-		log.Println(fmt.Sprintf("%s: %s", id, err))
-		return MessageContent{}, err
+		return MessageContent{}, fmt.Errorf("%s: %s", id, err)
 	}
 
 	file, err := os.Open(msgFilename)
 
 	if err != nil {
-		log.Println(err)
 		return MessageContent{}, err
 	}
 	defer file.Close()
@@ -105,7 +102,6 @@ func (mailbox *Notmuch) ReadMessage(id string) (MessageContent, error) {
 	env, err := enmime.ReadEnvelope(file)
 
 	if err != nil {
-		log.Println(err)
 		return MessageContent{}, err
 	}
 
@@ -157,8 +153,7 @@ func openDatabase(path string) (*notmuch.DB, error) {
 		return nil, err
 	}
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		msg := fmt.Sprintf("Mailbox directory '%s' does not exist", path)
-		return nil, errors.New(msg)
+		return nil, fmt.Errorf("Mailbox directory '%s' does not exist", path)
 	}
 	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
 		db, status = notmuch.Create(path)
