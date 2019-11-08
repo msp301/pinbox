@@ -55,7 +55,7 @@ func (mailbox *Notmuch) Labels() ([]Label, error) {
 	}
 
 	var payload []Label
-	tag := notmuch.Tag{}
+	tag := &notmuch.Tag{}
 	for tags.Next(&tag) {
 		name := tag.Value
 		if hidden[name] == 1 {
@@ -177,7 +177,7 @@ func toOurThread(thr *notmuch.Thread) Thread {
 	_, authors := thr.Authors()
 
 	var messages []Message
-	msg := notmuch.Message{}
+	msg := &notmuch.Message{}
 	msgs := thr.Messages()
 	for msgs.Next(&msg) {
 		var files []string
@@ -212,9 +212,9 @@ func toOurThread(thr *notmuch.Thread) Thread {
 
 func toOurThreads(threads *notmuch.Threads) []Thread {
 	var payload []Thread
-	thr := notmuch.Thread{}
+	thr := &notmuch.Thread{}
 	for threads.Next(&thr) {
-		res := toOurThread(&thr)
+		res := toOurThread(thr)
 		payload = append(payload, res)
 	}
 
