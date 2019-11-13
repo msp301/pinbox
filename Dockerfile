@@ -1,9 +1,11 @@
-FROM node:10.16.0-jessie-slim
-RUN npm install -g @angular/cli
+FROM node:lts-buster-slim
+RUN apt-get update && apt-get -y install yarnpkg
+RUN yarn global add @angular/cli
+RUN ng config -g cli.packageManager yarn
 RUN mkdir -p /pinbox
 WORKDIR /pinbox
 COPY . /pinbox/
-RUN npm install
+RUN yarn
 RUN ng build --prod
 
 FROM nginx:stable
