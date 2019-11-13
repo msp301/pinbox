@@ -1,4 +1,4 @@
-FROM node:10.16.0-jessie-slim
+FROM node:lts-buster-slim
 
 RUN npm install -g @angular/cli
 RUN mkdir -p /pinbox
