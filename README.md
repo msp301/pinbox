@@ -26,11 +26,10 @@ Pinbox consists of a single page app to provide the web interface and [a server]
 1. Clone 'pinbox' and '[pinbox-server](https://github.com/msp301/pinbox-server)'
 2. Start `pinbox-server` with `go build && ./pinbox-server <CONFIG FILE>`
 3. Build `pinbox` client with `make`
-4. Edit `proxy.conf.json` to point at your `pinbox-server` instance
 4. Start `pinbox` client with `make start`
 5. Navigate to `http://localhost:4200`
 
-The proxy config file `proxy.conf.json` is used by Angular to point API requests to `pinbox-server` without hard coding the hostname into the client code. By default this IS setup to use `localhost`.
+The Angular config files `proxy.conf.json` and `server.conf` point API requests to `pinbox-server` without hard coding the hostname into the client code. The setup expects `pinbox-server` and `pinbox` to be available on the same host.
 
 ## License
 
