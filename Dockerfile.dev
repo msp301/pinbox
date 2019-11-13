@@ -5,5 +5,3 @@ RUN mkdir -p /pinbox
 
 WORKDIR /pinbox
 
-COPY package.json /pinbox/package.json
-RUN npm install
