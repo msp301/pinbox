@@ -6,6 +6,10 @@ build-dev:
 build-prod:
 	docker build --rm -f Dockerfile -t pinbox-prod .
 
+attach:
+	docker run -it --name pinbox-dev -p 4200:4200 -w /pinbox --mount type=bind,source="$(shell pwd)",target=/pinbox pinbox:latest \
+		/bin/bash
+
 start-prod:
 	docker run -d -p 80:80 --name pinbox pinbox-prod
 
