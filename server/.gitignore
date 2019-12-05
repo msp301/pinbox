@@ -1,6 +1,10 @@
 # Config files
 *.toml
 
+# Certificates
+*.crt
+*.key
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
