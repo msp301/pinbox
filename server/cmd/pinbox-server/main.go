@@ -46,5 +46,16 @@ func main() {
 	router.HandleFunc("/api/messages", api.HandleAllMessages)
 
 	port := fmt.Sprintf(":%d", config.Port)
-	log.Fatal(http.ListenAndServe(port, router))
+
+	if config.TLS {
+		err = http.ListenAndServeTLS(port, config.CertificateFile, config.CertificateKey, router)
+	} else {
+		err = http.ListenAndServe(port, router)
+	}
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	os.Exit(0)
 }

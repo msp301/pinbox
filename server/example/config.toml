@@ -1,6 +1,10 @@
 maildir = "/home/example/mail"
 port = 8000
 
+tls = true
+certificate_file = "server.crt"
+certificate_key  = "server.key"
+
 # Label to use for inbox
 inbox = "inbox"
 
