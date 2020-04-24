@@ -7,18 +7,16 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import {
-  MatButtonModule,
-  MatExpansionModule,
-  MatInputModule,
-  MatListModule,
-  MatSlideToggleModule,
-  MatSidenavModule,
-  MatToolbarModule,
-  MatIconModule,
-  MatCardModule,
-  MatMenuModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { QuillModule } from 'ngx-quill';
 import { MailboxService } from './mailbox.service';
 import { MessageComponent } from './message/message.component';
