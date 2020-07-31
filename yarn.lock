@@ -6165,12 +6165,12 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
-ngx-quill@^7.1.0:
-  version "7.3.12"
-  resolved "https://registry.yarnpkg.com/ngx-quill/-/ngx-quill-7.3.12.tgz#3321f005f729507577dc9b130d9334ebddd67fdc"
-  integrity sha512-A49Q5KvBtzTRc+hmjzpvPkar1hOoaeGKEispeQ91yUaIB95fjzykx6SqWtcBmGFckNllCOIQV9iel9+RCnd+8Q==
+ngx-quill@12.0.1:
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/ngx-quill/-/ngx-quill-12.0.1.tgz#a35cc65519d3626f593f4f94888fdb1f697cd940"
+  integrity sha512-XSyj1ABpfdoIsRguV4vCemOUU0VnDeISBtF6O6XU11AUYSSP1Eh58x0ct2SEJuNIW/qruEGexQvLAYHkuA6+Xw==
   dependencies:
-    tslib "^1.9.0"
+    tslib "^2.0.0"
 
 nice-try@^1.0.4:
   version "1.0.5"
