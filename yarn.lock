@@ -1263,12 +1263,12 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@fortawesome/angular-fontawesome@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@fortawesome/angular-fontawesome/-/angular-fontawesome-0.4.0.tgz#ab794362a5e37124b834564dcb55ed1c0ce0413a"
-  integrity sha512-DYVXdCzwQo6d0CxVMRK+10LpBAvYN9xigWeQW4wKYq/Czd5es46nPMKixB5rHfNViECwwlM2gTM61K4DpxlJxg==
+"@fortawesome/angular-fontawesome@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/angular-fontawesome/-/angular-fontawesome-0.7.0.tgz#af9ac19e035960e9c05615ae86aac3b737ad7b13"
+  integrity sha512-U+eHYbKuVYrrm9SnIfl+z+6KTiI4Pu+S2OKh34JIi7C1jHhDcrVeDZISP/cpswHY7LWWDOPYeKE+yuWFlL4aVw==
   dependencies:
-    tslib "^1.9.0"
+    tslib "^2.0.0"
 
 "@fortawesome/fontawesome-common-types@^0.2.25":
   version "0.2.25"
@@ -6165,7 +6165,7 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
-ngx-quill@12.0.1:
+ngx-quill@^12.0.1:
   version "12.0.1"
   resolved "https://registry.yarnpkg.com/ngx-quill/-/ngx-quill-12.0.1.tgz#a35cc65519d3626f593f4f94888fdb1f697cd940"
   integrity sha512-XSyj1ABpfdoIsRguV4vCemOUU0VnDeISBtF6O6XU11AUYSSP1Eh58x0ct2SEJuNIW/qruEGexQvLAYHkuA6+Xw==
