@@ -7,3 +7,5 @@ WORKDIR /pinbox
 
 RUN yarn global add @angular/cli
 RUN ng config -g cli.packageManager yarn
+
+USER node
