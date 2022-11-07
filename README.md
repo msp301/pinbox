@@ -33,4 +33,4 @@ The Angular config files `proxy.conf.json` and `server.conf` point API requests 
 
 ## License
 
-Licensed under GPL-3.0
+Licensed under AGPL-3.0-or-later
