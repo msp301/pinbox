@@ -1,0 +1,178 @@
+# Copyright 2019 Martin Pritchard
+#
+# This file is part of Pinbox.
+#
+# Pinbox is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Pinbox is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Pinbox.  If not, see <https://www.gnu.org/licenses/>.
+
+openapi: "3.0.0"
+info:
+  description: "Backend API for Pinbox webmail"
+  title: "Pinbox Server"
+  version: "1.0.0"
+
+servers:
+  - url: /api
+
+components:
+  schemas:
+    epoch:
+      type: number
+      format: int64
+      example: 1553292839
+
+    Bundle:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          example: "bundle"
+        date:
+          $ref: "#/components/schemas/epoch"
+        threads:
+          type: array
+          items:
+            $ref: "#/components/schemas/Thread"
+
+    Label:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        epoch:
+          $ref: "#/components/schemas/epoch"
+        files:
+          type: array
+          items:
+            type: string
+
+    MessageContent:
+      type: object
+      properties:
+        id:
+          type: string
+        epoch:
+          $ref: "#/components/schemas/epoch"
+        author:
+          type: string
+        content:
+          type: string
+          format: byte # base64-encoded email body
+
+    Thread:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          example: "thread"
+        subject:
+          type: string
+        newestDate:
+          $ref: "#/components/schemas/epoch"
+        oldestDate:
+          $ref: "#/components/schemas/epoch"
+        authors:
+          type: array
+          items:
+            type: string
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/Message"
+
+tags:
+- name: "labels"
+  description: "Labels available to categorise messages"
+- name: "messages"
+  description: "Email message threads"
+
+paths:
+  /labels:
+    get:
+      tags:
+      - "labels"
+      summary: "All labels available for categorising email messages and threads"
+      description: ""
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Label"
+  /inbox:
+    get:
+      tags:
+        - "inbox"
+      summary: "Access all messages in email inbox"
+      description: "Retrieve messages with the 'inbox' label"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  anyOf:
+                    - $ref: "#/components/schemas/Thread"
+                    - $ref: "#/components/schemas/Bundle"
+  /messages:
+    get:
+      tags:
+        - "messages"
+      summary: "Access email threads"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Thread"
+  /messages/{id}:
+    get:
+      tags:
+        - "messages"
+      summary: "Access individual email"
+      parameters:
+        - in: path
+          name: id
+          description: "Message ID"
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MessageContent"
