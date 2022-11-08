@@ -23,4 +23,4 @@ Client App -> Backend API -> Notmuch -> OfflineIMAP
 
 ## License
 
-Licensed under GPL-3.0-or-later
+Licensed under AGPL-3.0-or-later
