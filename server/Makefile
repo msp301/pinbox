@@ -22,7 +22,6 @@ BINARY=pinbox-server
 $(BINARY): build test
 
 build:
-	go get -d ./...
 	go build -o $(BINARY) cmd/pinbox-server/main.go
 
 clean:
