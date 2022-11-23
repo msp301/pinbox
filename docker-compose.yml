@@ -1,0 +1,12 @@
+version: '3'
+services:
+  ui:
+    build: ./ui/
+    ports:
+      - 80:80
+  server:
+    build: ./server/
+    ports:
+      - 8000:8000
+    volumes:
+      - <PATH_TO_MAILDIR>:/mail
