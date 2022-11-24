@@ -2,34 +2,32 @@
 
 Pinbox is a self-hosted webmail client greatly inspired by Google Inbox.
 
-*Warning: Currently under development*
+*Warning: Pinbox is in early stages of development and lacks most functionality expected in a webmail client -- Contributions welcome :-)*
 
 ## Prerequisites
 
-* Docker (tested on Debian 10 with v18.09.1)
-* Go (https://golang.org/)
+* Docker and `docker-compose`
 * notmuch (https://notmuchmail.org/)
 
 ## Getting started
 
 ### Hosting your email
 
-Pinbox requires local access to a [Maildir](https://en.wikipedia.org/wiki/Maildir) directory. This can be setup with [OfflineIMAP](http://www.offlineimap.org/) or similar.
+Pinbox requires local access to a [Maildir](https://en.wikipedia.org/wiki/Maildir) directory. A mailbox can be synchronized to a local Maildir using [OfflineIMAP](http://www.offlineimap.org/) or similar. If you wish to try Pinbox with an exported mailbox and have a `.mbox` file, this file can be converted to a Maildir directory using [mb2md](https://github.com/dovecot/tools/blob/main/mb2md.pl).
 
-[Notmuch](https://notmuchmail.org/) mail indexer is used to provide fast email access and managing mailbox labels.
-Once you have `notmuch` installed on your system, run `notmuch setup && notmuch new <MAILDIR DIRECTORY>` to initialise the `notmuch` database ready for Pinbox.
+### Before starting Pinbox
+
+Pinbox uses the [Notmuch](https://notmuchmail.org/) mail indexer to provide fast email access and managing mailbox labels.
+
+Before Pinbox is able to read your Maildir directory `notmuch` needs to be installed on your system. Run `notmuch setup && notmuch new <MAILDIR DIRECTORY>` to initialise the `notmuch` database ready for Pinbox.
 
 ### Starting Pinbox
 
-Pinbox consists of a single page app to provide the web interface and [a server](https://github.com/msp301/pinbox-server) for handling access to your email.
+Pinbox consists of a single page app to provide the web interface and a server component for handling access to your email.
 
-1. Clone 'pinbox' and '[pinbox-server](https://github.com/msp301/pinbox-server)'
-2. Start `pinbox-server` with `go build && ./pinbox-server <CONFIG FILE>`
-3. Build `pinbox` client with `make`
-4. Start `pinbox` client with `make start`
-5. Navigate to `http://localhost:4200`
-
-The Angular config files `proxy.conf.json` and `server.conf` point API requests to `pinbox-server` without hard coding the hostname into the client code. The setup expects `pinbox-server` and `pinbox` to be available on the same host.
+1. Edit `docker-compose.yml` to insert the full path of your `maildir` directory
+2. Start all services using: `docker-compose up -d`
+3. Navigate to `http://localhost:4200`
 
 ## License
 

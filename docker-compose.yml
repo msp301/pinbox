@@ -2,10 +2,12 @@ version: '3'
 services:
   ui:
     build: ./ui/
+    container_name: pinbox
     ports:
-      - 80:80
+      - 4200:80
   server:
     build: ./server/
+    container_name: pinbox-server
     ports:
       - 8000:8000
     volumes:
